@@ -35,27 +35,3 @@ const db = mysql.createPool({
 
 export default db;
 
-
-
-
-// import {Sequelize } from 'sequelize';
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-
-// const sequelize = new Sequelize({
-//   dialect: 'sqlite',
-//   storage: './database.sqlite',
-//   logging: console.log,
-// });
-
-// // Test the connection
-// sequelize.authenticate()
-//   .then(() => {
-//     console.log('Connected to SQLite database with Sequelize.');
-//   })
-//   .catch(err => {
-//     console.error('Database connection failed:', err.message);
-//   });
-
-// export default sequelize;
