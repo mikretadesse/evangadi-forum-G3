@@ -1,23 +1,4 @@
 import db from '../config/database.js';
-
-//  Create table if not exists
-export async function initializeUserTable() {
-  const query = `
-    CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      user_name VARCHAR(255) NOT NULL UNIQUE,
-      email VARCHAR(255) NOT NULL UNIQUE,
-      password VARCHAR(255) NOT NULL,
-      profile_picture VARCHAR(255),
-      bio TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await db.query(query);
-  console.log(' Users table initialized (MySQL)');
-}
-
 //  Create a new user
 export async function createUser({ user_name, email, password, profile_picture = null, bio = null }) {
   if (!user_name || user_name.length < 3) {

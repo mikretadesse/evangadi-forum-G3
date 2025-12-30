@@ -1,5 +1,5 @@
 import { getQuestionById } from "../models/questionModel.js";
-import { getAnswersByQuestion } from "../models/answerModel.js";
+import { getAnswersByQuestion} from "../models/answerModel.js";
 import { ApiError } from "../utils/apiError.js";
 
 export const getAnswersByQuestionId = async (req, res, next) => {
@@ -21,7 +21,12 @@ export const getAnswersByQuestionId = async (req, res, next) => {
 
     //  Fetch answers for that question
     const answers = await getAnswersByQuestion(qid);
-
+if (answers.length === 0) {
+      return res.status(404).json({
+        error: "Not Found",
+        message: "No answers found for this question",
+      });
+    }
     res.status(200).json({
       success: true,
       data: {

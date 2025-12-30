@@ -1,37 +1,46 @@
-import mysql from 'mysql2/promise';
+import mysql from 'mysql2';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const db = mysql.createPool({
-  host: process.env.DB_HOST,      // Maps to "localhost"
-  user: process.env.DB_USER,      // Maps to "Owner"
-  password: process.env.DB_PASS,  // Maps to "DwpSz7aL8iRqQljj"
-  database: process.env.MYSQL_DB, // Maps to "evangadi_forum"
-  port: process.env.PORT || 4000, // Maps to 4000
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+// const db = mysql.createPool({
+//    host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.MYSQL_DB,
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0,
+// });  
  
-// Immediate test to see if it works
-(async () => {
-  try {
-    const connection = await db.getConnection();
-    console.log('✅ Connected to MySQL database successfully.');
-    connection.release(); // Release back to pool
-  } catch (err) {
-    console.error('❌ Database connection failed:');
-    console.error('Error Message:', err.message);
-    
-    // Debugging hint
-    if (err.code === 'ECONNREFUSED') {
-        console.error('Hint: Is your MySQL server running?');
-    } else if (err.code === 'ER_ACCESS_DENIED_ERROR') {
-        console.error('Hint: Double check your DB_USER and DB_PASS in .env');
-    }
+const db = mysql.createPool({
+   host:"localhost",
+  user:"myDBuser",
+  // password:""
+  database:"evangadi_forum",
+  waitForConnections: true, 
+  connectionLimit: 10,
+  queueLimit: 0, 
+});
+
+//   to  Everyone
+//  host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.MYSQL_DB,
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0,
+// });
+
+
+db.getConnection((err) => {
+  if (err) {
+    console.error("Database connection failed:", err.message);
+  } else {
+    console.log("Connected to MySQL database.");
   }
-})();
+});
 
 export default db;
 

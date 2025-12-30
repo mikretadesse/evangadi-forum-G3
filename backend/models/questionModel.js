@@ -1,20 +1,5 @@
 import db from '../config/database.js';
-//Initialize table if it doesn't exist
-export async function initializeQuestionTable() {
-  const query = `
-    CREATE TABLE IF NOT EXISTS questions (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      title VARCHAR(255) NOT NULL,
-      description TEXT NOT NULL,
-      options JSON NOT NULL,
-      correct_answer VARCHAR(255) NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    )
-  `;
-  await db.query(query);
-  console.log('Questions table initialized (MySQL)');
-}
+
 
 // Create a Question
 export async function createQuestion({ title, description, options, correctAnswer }) {
