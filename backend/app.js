@@ -26,6 +26,12 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // ----------Routes--------------//
 app.use("/api/user", authRoutes);
+
+// password routes
+
+import passwordRoutes from "./routes/passwordRoutes.js";
+app.use("/api/password", passwordRoutes);
+
 app.use("/api/question", questionRoutes);
 // app.use("/api/answer", answerRoutes);
 app.use("/api/comments", commentRoutes);
