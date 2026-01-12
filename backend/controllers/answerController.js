@@ -10,7 +10,7 @@ import createNotification from "../utils/createNotification.js";
 export const postAnswer = async (req, res) => {
   const { question_id } = req.params;
   let { answer } = req.body;
-  const user_id = req.user?.userid; // Ensure JWT sets this consistently
+  const user_id = req.user?.id; // Ensure JWT sets this consistently
 
   // 1. Check authentication
   if (!user_id) {

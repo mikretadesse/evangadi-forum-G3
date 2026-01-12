@@ -44,9 +44,8 @@ const Signup = ({ switchToLogin }) => {
       });
 
       localStorage.getItem("token", data.token);
-
-      console.log(data);
-      navigate("/");
+      // console.log(data);
+      navigate("/home");
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Please try again."
@@ -114,7 +113,7 @@ const Signup = ({ switchToLogin }) => {
               {showPassword ? <FiEyeOff /> : <FiEye />}
             </span>
           </div>
-          <button type="submit" className={styles.submitBtn}>
+          <button type="submit" className={styles.submitBtn} >
             Agree and Join
           </button>
         </form>

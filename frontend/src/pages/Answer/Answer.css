@@ -120,6 +120,12 @@
   text-align: center;
   margin: 10px 0;
 }
+.buttonRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
 
 .answer__link a {
   text-decoration: none;

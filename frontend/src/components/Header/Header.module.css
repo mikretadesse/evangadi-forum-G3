@@ -1,181 +1,94 @@
+ /* Basic Header */
 .header {
   width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background: white;
+  padding: 10px 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Container for everything */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-/* Logo */
-.logo {
-  text-decoration: none;
-}
-
-.logoPrimary {
-  font-size: 22px;
-  font-weight: 700;
-  color: #ff8500;
-  letter-spacing: 1px;
-}
-
-/* Navigation */
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
-
-.navLink {
-  text-decoration: none;
-  font-size: 14px;
-  color: #333333;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.navLink:hover {
-  color: #ff8500;
-}
-
-/* Sign In Button */
-.signInBtn {
-  text-decoration: none;
-  background-color: #516cf0;
-  color: #ffffff;
-  padding: 8px 18px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
-}
-
-.signInBtn:hover {
-  background-color: #4058c8;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .container {
-    height: auto;
-    padding: 15px 20px;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .nav {
-    gap: 15px;
-  }
-}
-.header {
-  width: 100%;
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 /* Logo */
-.logo {
-  text-decoration: none;
-  padding-left: 110px;
-  align-items: center;
+.logo img {
+  width: 150px;
 }
 
-.logoPrimary {
-  font-size: 22px;
-  font-weight: 700;
-  color: #ff8500;
-  letter-spacing: 1px;
-}
-
-/* Navigation */
+/* Navigation menu */
 .nav {
   display: flex;
+  gap: 20px;
   align-items: center;
-  gap: 25px;
 }
+
+/* Navigation links */
 .navLink {
+  color: #333;
   text-decoration: none;
-  font-size: 14px;
-  color: #333333;
   font-weight: 500;
-  transition: color 0.2s ease;
 }
 
-.navLink:hover {
-  color: #ff8500;
-}
-
-/* Existing styles... */
-
-/* Logout Button Styles */
+/* Buttons (Sign In / Log Out) */
+.signInBtn,
 .logoutBtn {
-  text-decoration: none;
-  background-color: #516cf0;
-  color: #ffffff;
+  background: #516cf0;
+  color: white;
   border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
-}
-
-.logoutBtn:hover {
-  background-color: #4058c8;
-}
-
-.logoutBtn:active {
-  transform: translateY(0);
-}
-/* Sign In Button */
-.signInBtn {
-  text-decoration: none;
-  background-color: #516cf0;
-  color: #ffffff;
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: 4px;
-  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
   font-weight: 600;
-  transition: background-color 0.2s ease;
 }
 
-.signInBtn:hover {
-  background-color: #4058c8;
+.signInBtn:hover,
+.logoutBtn:hover {
+  background: #4058c8;
 }
 
-/* Responsive */
+/* ============ MOBILE STYLES ============ */
 @media (max-width: 768px) {
+  /* Stack everything on mobile */
   .container {
-    height: auto;
-    padding: 15px 20px;
     flex-direction: column;
-    gap: 12px;
-  }
-
-  .nav {
     gap: 15px;
+  }
+  
+  /* Make navigation wrap */
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  /* Smaller logo on mobile */
+  .logo img {
+    width: 130px;
+  }
+}
+
+/* ============ VERY SMALL PHONES ============ */
+@media (max-width: 480px) {
+  /* Reduce gaps */
+  .nav {
+    gap: 10px;
+  }
+  
+  /* Smaller buttons */
+  .signInBtn,
+  .logoutBtn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  
+  /* Smaller logo */
+  .logo img {
+    width: 110px;
   }
 }

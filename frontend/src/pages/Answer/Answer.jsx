@@ -58,24 +58,28 @@ const Answer = () => {
   return (
     <div className="container my-4">
       {/* Question */}
-      <div className="border-bottom pb-3 mb-4">
+      <div className=" pb-2">
         <h3>Question</h3>
-        <h5 className="fw-semibold">{question?.title}</h5>
-        <p className="text-muted">{question?.description}</p>
+        <div className="fw-semibold text-start ">{question?.title}</div>
+        <div className="text-muted">{question?.description}</div>
       </div>
 
       {/* Answers */}
-      <h4 className="mb-3">Answer From The Community</h4>
+      <h4 className=" border-bottom py-2 border-top  ">
+        Answer From The Community
+      </h4>
 
       {answers.map((item) => (
         <div key={item.answer_id} className="mb-4">
-          <div className="d-flex gap-3 border-bottom pb-3">
-            <FaUserCircle size={45} className="text-secondary" />
-            <div className="w-100">
+          <div className="d-flex gap-3 border-bottom ms-auto ">
+            <div className="d-flex py-1 flex-column gap-1">
+              <FaUserCircle size={45} className="text-secondary" />
               <small className="fw-semibold">
-                {item.username || item.first_name || "Anonymous"}
+                {item.username || item.first_name}
               </small>
-              <div className="bg-light rounded p-3 mt-2">
+            </div>
+            <div className="w-100 ">
+              <div className="bg-light rounded p-1 mt-1">
                 {item.answer_body || item.answer}
               </div>
             </div>
@@ -105,7 +109,7 @@ const Answer = () => {
               onChange={(e) => setAnswerText(e.target.value)}
             />
 
-            <div className="d-grid d-md-flex justify-content-md-center">
+            <div className="buttonRow  d-md-flex justify-content-md-center">
               <button className="btn btn-primary px-4" type="submit">
                 Post Your Answer
               </button>

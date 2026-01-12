@@ -1,5 +1,6 @@
 .home {
   max-width: 980px;
+  height: 75vh;
   margin: 0 auto;
   padding: 2rem 1rem 4rem;
   display: flex;

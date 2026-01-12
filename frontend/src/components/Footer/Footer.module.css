@@ -1,59 +1,65 @@
-.footer{
-    width: 100%;
-   background-color: #38485a; 
-   color: white;
-   padding-bottom: 20px;
-   }
-   .footer__logo > img{
-       width: auto;
-   }
-   .footer{
-       /* display: flex; */
-       justify-content: space-evenly;
-       padding-top: 20px;
-       margin-bottom: 0;
-   }
-   .footer__socialMedias{
-    margin-top: 20px;
-      font-size: 35px;
-       display: flex; 
-       /* justify-content: space-between; */
-   
-   }
-   
-   .footer__info  {
-      font-weight: bold;
-      font-family: "Lato", sans-serif;
-      font-size: 20px;
-   }
-   .footer__infoText{
-       font-size: 14px;
-       padding-top: 5px;
-       color: lightgrey;
-       
-   }
-    a i {
-      color: white;
-   }
+/* Footer Styles - Always at bottom */
 
-   @media(max-width:1000px){
-    .footer{
-        text-align: center;
-    }
-    .footer__socialMedias{
-        justify-content: center;
-        margin-bottom: 10px;
-        /* font-size: 30px ; */
-     
-  color: #fff;
-  font-size: 22px; 
+.footer {
+  width: 100%;
+  background-color: #38485a;
+  color: white;
+  padding-bottom: 20px;
+  margin-top: auto; /* ✅ ADD THIS - pushes to bottom */
+}
 
-    }
-    Link i  {
+.footer__logo > img {
+  width: auto;
+}
+
+.footer {
+  /* display: flex; */
+  justify-content: space-evenly;
+  padding-top: 20px;
+  margin-bottom: 0;
+}
+
+.footer__socialMedias {
+  margin-top: 20px;
+  font-size: 35px;
+  display: flex;
+  /* justify-content: space-between; */
+}
+
+.footer__info {
+  font-weight: bold;
+  font-family: "Lato", sans-serif;
+  font-size: 20px;
+}
+
+.footer__infoText {
+  font-size: 14px;
+  padding-top: 5px;
+  color: lightgrey;
+}
+
+a i {
   color: white;
 }
 
-    .footer__right{
-        margin: 15px 0;
-    }
-   }
+@media (max-width: 1000px) {
+  .footer {
+    text-align: center;
+  }
+  
+  .footer__socialMedias {
+    justify-content: center;
+    margin-bottom: 10px;
+    /* font-size: 30px ; */
+    color: #fff;
+    font-size: 22px;
+  }
+  
+  Link i {
+    color: white;
+  }
+
+  .footer__right {
+    margin: 15px 0;
+  }
+}

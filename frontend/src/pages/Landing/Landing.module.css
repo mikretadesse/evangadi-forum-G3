@@ -1,39 +1,65 @@
-body {
-  background-color: #f7f7f7;
+/* Landing Page - Footer at bottom fix */
+
+/* Make page fill full height */
+html, body {
+  height: 100%;
 }
+
+/* Main wrapper fills page */
 .wrapper {
   display: flex;
   width: 100%;
+  min-height: 100vh; /* Full height */
 }
 
+/* Left side - Login/Signup */
 .authSection {
   flex: 1;
   background-color: #f7f7f7;
   display: flex;
-  top: 0;
   flex-direction: column;
-  justify-content: start;
-  align-items: end;
-  padding: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-/* RIGHT: ABOUT */
+/* Right side - About info */
 .aboutSection {
   flex: 1;
-  position: sticky;
-  overflow: hidden;
-  justify-content: start;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
 }
 
-/* RESPONSIVE */
+/* ============ TABLET & MOBILE ============ */
 @media (max-width: 768px) {
+  /* Stack sections */
   .wrapper {
     flex-direction: column;
   }
-
+  
+  /* Full width sections */
+  .authSection {
+    width: 100%;
+    min-height: 50vh; /* Half screen */
+  }
+  
   .aboutSection {
-    position: relative;
-    height: auto;
+    width: 100%;
+    min-height: 50vh; /* Half screen */
+  }
+}
+
+/* ============ SMALL PHONES ============ */
+@media (max-width: 480px) {
+  .authSection {
+    padding: 15px;
+  }
+  
+  .aboutSection {
+    padding: 15px;
   }
 }

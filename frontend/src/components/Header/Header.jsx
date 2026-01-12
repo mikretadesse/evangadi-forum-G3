@@ -21,9 +21,9 @@ const Header = () => {
             Home
           </Link>
 
-          {/* <Link to="/how-it-works" className={styles.navLink}>
+          <Link to="/how-it-works" className={styles.navLink}>
             How it Works
-          </Link> */}
+          </Link>
 
           {/* Show Notification Bell only if logged in */}
           {isLoggedIn && <NotificationBell />}
