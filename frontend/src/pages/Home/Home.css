@@ -151,3 +151,110 @@
   font-size: 14px;
   font-style: italic;
 }
+
+/* ================= Responsive Design =================
+
+/* -------- Tablets (≤ 768px) -------- */
+@media (max-width: 768px) {
+  .home {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .home__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .home__qbtn button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .home__welcome h6 {
+    font-size: 0.95rem;
+  }
+
+  .home__questions {
+    padding: 0.8rem 0.4rem;
+  }
+
+  .home__question {
+    font-size: 0.9rem;
+  }
+
+  .home__questionsArrow {
+    font-size: 1.7rem;
+  }
+
+  .search__input {
+    font-size: 0.9rem;
+  }
+}
+
+/* -------- Mobile (≤ 480px) -------- */
+@media (max-width: 480px) {
+  .home {
+    padding: 1rem 0.7rem 2.5rem;
+  }
+
+  .home__top {
+    align-items: stretch;
+  }
+
+  .home__qbtn button {
+    font-size: 0.9rem;
+    padding: 0.55rem;
+  }
+
+  .home__welcome h6 {
+    font-size: 0.85rem;
+  }
+
+  .home__questions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .home__questions > div {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .home__question {
+    width: 100%;
+    font-size: 0.88rem;
+  }
+
+  .home__questionsArrow {
+    align-self: flex-end;
+    font-size: 1.5rem;
+  }
+
+  .answerDate {
+    font-size: 0.75rem;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pagination button {
+    width: 100%;
+  }
+}
+
+/* -------- Very Small Devices (≤ 360px) -------- */
+@media (max-width: 360px) {
+  .home__question {
+    font-size: 0.82rem;
+  }
+
+  .home__user {
+    font-size: 0.8rem;
+  }
+} */
+
