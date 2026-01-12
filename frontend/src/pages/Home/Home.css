@@ -155,7 +155,7 @@
 /* ================= Responsive Design =================
 
 /* -------- Tablets (≤ 768px) -------- */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .home {
     padding: 1.5rem 1rem 3rem;
   }
@@ -190,10 +190,10 @@
   .search__input {
     font-size: 0.9rem;
   }
-}
+} */
 
 /* -------- Mobile (≤ 480px) -------- */
-@media (max-width: 480px) {
+/* @media (max-width: 480px) {
   .home {
     padding: 1rem 0.7rem 2.5rem;
   }
@@ -245,10 +245,10 @@
   .pagination button {
     width: 100%;
   }
-}
+} */
 
 /* -------- Very Small Devices (≤ 360px) -------- */
-@media (max-width: 360px) {
+/* @media (max-width: 360px) {
   .home__question {
     font-size: 0.82rem;
   }
@@ -256,5 +256,5 @@
   .home__user {
     font-size: 0.8rem;
   }
-} */
+} */ 
 
