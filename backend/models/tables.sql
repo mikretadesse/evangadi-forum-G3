@@ -61,3 +61,32 @@ CREATE TABLE IF NOT EXISTS answer_votes (
   FOREIGN KEY (userid) REFERENCES users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (answerid) REFERENCES answers(answer_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS likes (
+  like_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  target_id INT NOT NULL,
+  target_type ENUM('question','answer') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT unique_like UNIQUE (user_id, target_id, target_type),
+
+  FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  notification_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,        -- receiver
+  sender_id INT NOT NULL,      -- actor
+  type ENUM('LIKE','ANSWER','COMMENT') NOT NULL,
+  target_id INT NOT NULL,
+  target_type ENUM('question','answer') NOT NULL,
+  message VARCHAR(255),
+  is_read BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE
+);

@@ -28,10 +28,11 @@ const Home = () => {
     let isMounted = true;
     const fetchQuestions = async () => {
       try {
-        const res = await api.get("/question");
+        // ✅ FIXED: Correct API endpoint for fetching all questions
+        const res = await api.get("/question"); // must match backend route GET /api/question
         if (isMounted) setQuestions(res.data.questions || []);
       } catch (err) {
-        console.error(err);
+        console.error("Fetch questions error:", err);
         if (isMounted) setError("Failed to load questions.");
       } finally {
         if (isMounted) setLoading(false);
@@ -105,12 +106,12 @@ const Home = () => {
           <p>No questions found.</p>
         ) : (
           currentQuestions.map((item) => (
-            <div key={item.post_id}>
+            <div key={item.question_id}> {/* ✅ FIXED: use question_id as key */}
               <div
                 className="home__questions"
                 onClick={() => navigate(`/answer/${item.question_id}`)}
               >
-                  <div>
+                <div>
                   <FaUserCircle style={{ fontSize: "60px" }} />
                   <div className="home__user mx-3">
                     {item.username || item.first_name || `User ${item.user_id}`}
@@ -120,9 +121,7 @@ const Home = () => {
                   </span>
                 </div>
 
-                <div className="home__question">
-                  {item.title || item.question}
-                </div>
+                <div className="home__question">{item.title}</div> {/* ✅ FIXED: use title instead of question or post_id */}
                 <GrFormNext className="home__questionsArrow" />
               </div>
               <hr />

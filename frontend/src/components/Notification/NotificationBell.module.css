@@ -1,0 +1,51 @@
+.bellContainer {
+  position: relative;
+  margin-right: 10px;
+}
+
+.bellIcon {
+  cursor: pointer;
+  position: relative;
+  font-size: 24px;
+}
+
+.unreadBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 36px;
+  width: 250px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notificationItem {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.notificationItem.unread {
+  font-weight: bold;
+  background-color: #f0f8ff;
+}
+
+.notificationItem:last-child {
+  border-bottom: none;
+}
