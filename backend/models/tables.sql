@@ -2,6 +2,12 @@
 CREATE DATABASE IF NOT EXISTS evangadi_forum;
 USE evangadi_forum;
 
+DROP TABLE IF EXISTS answer_votes;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS answers;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS users;
+
 -- 2. Users Table
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -10,10 +16,8 @@ CREATE TABLE users (
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-
-    COLUMN reset_otp VARCHAR(6) NULL,
-    COLUMN reset_otp_expiry BIGINT NULL,
-
+    reset_otp VARCHAR(6) NULL,
+    reset_otp_expiry BIGINT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -30,17 +34,21 @@ CREATE TABLE questions (
         ON DELETE CASCADE
 );
 
+--  4. Answer Table
 CREATE TABLE IF NOT EXISTS answers(
   answer_id INT AUTO_INCREMENT PRIMARY KEY,
-  answer_body TEXT NOT NULL,
+  answer TEXT NOT NULL,
   user_id INT NOT NULL,
   question_id INT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  likes INT DEFAULT 0,
+  dislikes INT DEFAULT 0,
+
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE  -- FIXED: Added parentheses
+  FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE  
 );
 
--- Comments table for answers
+-- 5. Comments table (for answers)
 CREATE TABLE IF NOT EXISTS comments(
   comment_id INT AUTO_INCREMENT PRIMARY KEY,
   comment_body TEXT NOT NULL,
@@ -50,32 +58,8 @@ CREATE TABLE IF NOT EXISTS comments(
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (answer_id) REFERENCES answers(answer_id) ON DELETE CASCADE
 );
--- Answer votes table
-CREATE TABLE IF NOT EXISTS answer_votes (
-  vote_id INT AUTO_INCREMENT PRIMARY KEY,
-  userid INT NOT NULL,
-  answerid INT NOT NULL,
-  vote_type ENUM('upvote', 'downvote') NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT unique_user_answer_vote UNIQUE (userid, answerid),
-  FOREIGN KEY (userid) REFERENCES users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (answerid) REFERENCES answers(answer_id) ON DELETE CASCADE
-);
 
-CREATE TABLE IF NOT EXISTS likes (
-  like_id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  target_id INT NOT NULL,
-  target_type ENUM('question','answer') NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  CONSTRAINT unique_like UNIQUE (user_id, target_id, target_type),
-
-  FOREIGN KEY (user_id)
-    REFERENCES users(user_id)
-    ON DELETE CASCADE
-);
-
+-- 6. Notification table
 CREATE TABLE IF NOT EXISTS notifications (
   notification_id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,        -- receiver
@@ -90,3 +74,30 @@ CREATE TABLE IF NOT EXISTS notifications (
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (sender_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+-- 7. Answer Votes table
+CREATE TABLE IF NOT EXISTS answer_votes (
+  vote_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  answer_id INT NOT NULL,
+  vote_type ENUM('upvote', 'downvote') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_user_answer_vote UNIQUE (user_id, answer_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (answer_id) REFERENCES answers(answer_id  ) ON DELETE CASCADE
+);
+
+-- Aditional column for updating (editing) questions
+ALTER TABLE questions
+ADD COLUMN updated_at TIMESTAMP
+DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP;
+
+-- Aditional column for updating (editing) answers
+ALTER TABLE answers
+ADD COLUMN updated_at TIMESTAMP
+DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE answers
+ADD COLUMN likes INT DEFAULT 0,
+ADD COLUMN dislikes INT DEFAULT 0;

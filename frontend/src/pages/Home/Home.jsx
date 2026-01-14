@@ -1,4 +1,4 @@
-import "./Home.css";
+import styles from "./Home.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { GrFormNext } from "react-icons/gr";
@@ -12,24 +12,24 @@ const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // State variables
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  // Redirect if not logged in
+  // Redirect if user not authenticated
   useEffect(() => {
     if (!user) navigate("/");
   }, [user, navigate]);
 
-  // Fetch questions
+  // Fetch all questions from backend
   useEffect(() => {
-    let isMounted = true;
+    let isMounted = true; // prevent state update after unmount
     const fetchQuestions = async () => {
       try {
-        // ✅ FIXED: Correct API endpoint for fetching all questions
-        const res = await api.get("/question"); // must match backend route GET /api/question
+        const res = await api.get("/question");
         if (isMounted) setQuestions(res.data.questions || []);
       } catch (err) {
         console.error("Fetch questions error:", err);
@@ -39,25 +39,28 @@ const Home = () => {
       }
     };
     fetchQuestions();
-    return () => (isMounted = false);
+    return () => (isMounted = false); // cleanup
   }, []);
 
-  /* Format date */
+  // Format date for display
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
+      year: "numeric",
       month: "short",
       day: "numeric",
-      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
-  // Filter + Pagination
+  // Filter questions based on search
   const filteredQuestions = questions.filter((q) =>
     q.title?.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Pagination calculations
   const totalPages = Math.ceil(filteredQuestions.length / QUESTIONS_PER_PAGE);
   const startIndex = (currentPage - 1) * QUESTIONS_PER_PAGE;
   const currentQuestions = filteredQuestions.slice(
@@ -65,81 +68,123 @@ const Home = () => {
     startIndex + QUESTIONS_PER_PAGE
   );
 
+  // Go to specific page
   const goToPage = (page) => {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
+  };
+
+  // Delete question
+  const deleteQuestion = async (e, question_id) => {
+    e.stopPropagation(); // prevent navigation
+    if (!window.confirm("Are you sure you want to delete this question?"))
+      return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await api.delete(`/question/${question_id}`, {
+        headers: { Authorization: "Bearer " + token },
+      });
+
+      // Remove deleted question from state
+      setQuestions((prev) => prev.filter((q) => q.question_id !== question_id));
+      alert("Question deleted successfully");
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      alert("Error deleting question");
+    }
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="home">
-      <div className="home__top">
-        <div className="home__qbtn">
-          <Link to="/ask-question">
-            <button>Ask Question</button>
-          </Link>
-        </div>
-
-        <div className="home__welcome">
-          <h6>Welcome: {user?.name || user?.username || "User"}</h6>
-        </div>
+  <div className={styles.pageWrapper}>
+    <div className={styles.homeHead}>
+      <div className={styles.askSection}>
+        <Link to="/ask-question">
+          <button className={styles.askBtn}>Ask Question</button>
+        </Link>
       </div>
+      <h4 className={styles.welcomeMsg}>
+        Welcome: <span className={styles.username}>{user?.username}</span>
+      </h4>
+    </div>
 
-      {/* Search bar */}
-      <div className="search__container">
-        <input
-          type="text"
-          placeholder="Search questions..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="search__input"
-        />
-      </div>
+    <div className={styles.searchBox}>
+      <input
+        type="text"
+        placeholder="Search question"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+    </div>
 
-      <div className="home__container">
-        <h3>Questions</h3>
-        <hr />
-
+      <div className={styles.questionsList}>
         {currentQuestions.length === 0 ? (
-          <p>No questions found.</p>
+          <p>No questions found. Be the first one.</p>
         ) : (
           currentQuestions.map((item) => (
-            <div key={item.question_id}> {/* ✅ FIXED: use question_id as key */}
-              <div
-                className="home__questions"
-                onClick={() => navigate(`/answer/${item.question_id}`)}
-              >
-                <div>
-                  <FaUserCircle style={{ fontSize: "60px" }} />
-                  <div className="home__user mx-3">
-                    {item.username || item.first_name || `User ${item.user_id}`}
-                  </div>
-                  <span className="answerDate">
-                    {formatDate(item.created_at)}
-                  </span>
+            <div
+              key={item.question_id}
+              className={styles.questionItem}
+              onClick={() => navigate(`/answer/${item.question_id}`)}>
+              <div className={styles.questionLeft}>
+                <div className={styles.avatar}>
+                  <FaUserCircle />
                 </div>
-
-                <div className="home__question">{item.title}</div> {/* ✅ FIXED: use title instead of question or post_id */}
-                <GrFormNext className="home__questionsArrow" />
+                <div>
+                  <div className={styles.questionText}>{item.title}</div>
+                  <div className={styles.author}>
+                    {item.username} •{" "}
+                    <span className={styles.date}>
+                      {formatDate(item.created_at)}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <hr />
+
+              {item.user_id === user?.id && (
+                <div className={styles.questionActions}>
+                  <button
+                    className={styles.editBtn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/EditQuestion/${item.question_id}/edit`);
+                    }}>
+                    Edit
+                  </button>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={(e) => deleteQuestion(e, item.question_id)}>
+                    Delete
+                  </button>
+                </div>
+              )}
+
+              <GrFormNext className={styles.arrow} />
             </div>
           ))
         )}
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="pagination">
-            <button onClick={() => goToPage(currentPage - 1)}>Prev</button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button onClick={() => goToPage(currentPage + 1)}>Next</button>
-          </div>
-        )}
       </div>
+
+      {totalPages > 1 && (
+        <div className={styles.pagination}>
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}>
+            Prev
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}>
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

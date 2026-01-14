@@ -1,15 +1,8 @@
-/* Landing Page - Footer at bottom fix */
-
-/* Make page fill full height */
-html, body {
-  height: 100%;
-}
-
 /* Main wrapper fills page */
 .wrapper {
   display: flex;
   width: 100%;
-  min-height: 100vh; /* Full height */
+  min-height: 60vh;
 }
 
 /* Left side - Login/Signup */
@@ -18,8 +11,8 @@ html, body {
   background-color: #f7f7f7;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: end;
   padding: 20px;
 }
 
@@ -28,10 +21,10 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   padding: 20px;
-  background-color: white;
+  background-color: #f7f7f7;
 }
 
 /* ============ TABLET & MOBILE ============ */
@@ -40,16 +33,16 @@ html, body {
   .wrapper {
     flex-direction: column;
   }
-  
+
   /* Full width sections */
   .authSection {
     width: 100%;
-    min-height: 50vh; /* Half screen */
+    min-height: 50vh;
   }
-  
+
   .aboutSection {
     width: 100%;
-    min-height: 50vh; /* Half screen */
+    min-height: 50vh;
   }
 }
 
@@ -58,7 +51,7 @@ html, body {
   .authSection {
     padding: 15px;
   }
-  
+
   .aboutSection {
     padding: 15px;
   }

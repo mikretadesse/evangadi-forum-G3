@@ -1,11 +1,9 @@
-/* Footer Styles - Always at bottom */
-
 .footer {
   width: 100%;
   background-color: #38485a;
   color: white;
   padding-bottom: 20px;
-  margin-top: auto; /* ✅ ADD THIS - pushes to bottom */
+  margin-top: auto;
 }
 
 .footer__logo > img {
@@ -23,7 +21,6 @@
   margin-top: 20px;
   font-size: 35px;
   display: flex;
-  /* justify-content: space-between; */
 }
 
 .footer__info {
@@ -46,7 +43,7 @@ a i {
   .footer {
     text-align: center;
   }
-  
+
   .footer__socialMedias {
     justify-content: center;
     margin-bottom: 10px;
@@ -54,7 +51,7 @@ a i {
     color: #fff;
     font-size: 22px;
   }
-  
+
   Link i {
     color: white;
   }

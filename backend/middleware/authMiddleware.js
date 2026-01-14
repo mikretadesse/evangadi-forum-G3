@@ -19,7 +19,8 @@ export const authenticateToken = (req, res, next) => {
 
     req.user = {
       id: decoded.id,
-       username: decoded.username,
+      email: decoded.email,
+      username: decoded.username,
     };
 
     next();

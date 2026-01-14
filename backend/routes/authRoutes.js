@@ -9,15 +9,14 @@ import {
   verifyResetToken,
 } from "../controllers/authController.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
+
 // Public routes
-router.post("/register", registerLimiter, registerUser); // Signup endpoint
-router.post("/login", loginLimiter, loginUser); // Login endpoint
-router.post("/reset-password", resetPassword); // Reset password endpoint
-router.post("/verify-reset-token", verifyResetToken); // Verify reset token endpoint
+router.post("/register", registerLimiter, registerUser);
+router.post("/login", loginLimiter, loginUser);
+router.post("/reset-password", resetPassword);
+router.post("/verify-reset-token", verifyResetToken);
+
 // Protected route to check user authentication status
 router.get("/check-user", authenticateToken, checkUser);
 
 export default router;
-
-
-

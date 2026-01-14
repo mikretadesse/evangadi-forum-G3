@@ -11,12 +11,12 @@ import {
 const router = express.Router();
 
 // Public routes
-router.get("/", getAllQuestions); // GET /api/question
-router.get("/:question_id", getQuestionById); // GET /api/question/1
+router.get("/", getAllQuestions);
+router.get("/:question_id", getQuestionById);
 
 // Protected routes
-router.post("/", authenticateToken, postQuestion); // POST /api/question
-router.put("/:question_id", authenticateToken, editQuestion); // PUT /api/question/1
-router.delete("/:question_id", authenticateToken, deleteQuestion); // DELETE /api/question/1
+router.post("/", authenticateToken, postQuestion);
+router.patch("/:question_id", authenticateToken, editQuestion);
+router.delete("/:question_id", authenticateToken, deleteQuestion);
 
 export default router;

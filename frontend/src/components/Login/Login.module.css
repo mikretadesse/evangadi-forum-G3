@@ -9,7 +9,7 @@
 /* Login card container */
 .loginCard {
   width: 100%;
-  max-width: 540px;
+  max-width: 500px; 
   background: #ffffff;
   padding: 3rem;
   margin: 2rem;

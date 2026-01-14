@@ -1,9 +1,9 @@
- /* Basic Header */
+/* Basic Header */
 .header {
   width: 100%;
   background: white;
   padding: 10px 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Container for everything */
@@ -37,14 +37,14 @@
 /* Buttons (Sign In / Log Out) */
 .signInBtn,
 .logoutBtn {
-  background: #516cf0;
+  background: #1976d2;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 550;
 }
 
 .signInBtn:hover,
@@ -59,14 +59,14 @@
     flex-direction: column;
     gap: 15px;
   }
-  
+
   /* Make navigation wrap */
   .nav {
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
   }
-  
+
   /* Smaller logo on mobile */
   .logo img {
     width: 130px;
@@ -79,14 +79,14 @@
   .nav {
     gap: 10px;
   }
-  
+
   /* Smaller buttons */
   .signInBtn,
   .logoutBtn {
     padding: 6px 12px;
     font-size: 14px;
   }
-  
+
   /* Smaller logo */
   .logo img {
     width: 110px;

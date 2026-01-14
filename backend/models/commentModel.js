@@ -35,13 +35,4 @@ export const getCommentsByAnswer = async (answerId) => {
   }
 };
 
-export const deleteComment = async (commentId, userId) => {
-  try {
-    const query = "DELETE FROM comments WHERE comment_id = ? AND user_id = ?";
-    const [result] = await database.promise().query(query, [commentId, userId]);
-    return result;
-  } catch (error) {
-    console.log("Error deleting comment:", error.message);
-    throw error;
-  }
-};
+
