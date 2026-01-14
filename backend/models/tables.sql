@@ -28,6 +28,7 @@ CREATE TABLE questions (
     title VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_question_user
         FOREIGN KEY (user_id)
         REFERENCES users(user_id)
@@ -43,10 +44,26 @@ CREATE TABLE IF NOT EXISTS answers(
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   likes INT DEFAULT 0,
   dislikes INT DEFAULT 0,
-
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (question_id) REFERENCES questions(question_id) ON DELETE CASCADE  
 );
+
+-- Answer votes table
+CREATE TABLE IF NOT EXISTS answer_votes (
+  vote_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  answer_id INT NOT NULL,
+  vote_type ENUM('upvote','downvote') NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_vote (user_id, answer_id), -- ensures a user votes only once per answer
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (answer_id) REFERENCES answers(answer_id) ON DELETE CASCADE
+);
+
+
+
+
+
 
 -- 5. Comments table (for answers)
 CREATE TABLE IF NOT EXISTS comments(

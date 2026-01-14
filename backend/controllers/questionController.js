@@ -8,7 +8,7 @@ import db from "../config/database.js";
 export const getAllQuestions = async (req, res) => {
   try {
     // 1. Fetch all questions from the database
-   const [rows] = await db.promise().query(`
+    const [rows] = await db.promise().query(`
   SELECT 
     q.*,
     u.username,
@@ -43,7 +43,7 @@ export const getAllQuestions = async (req, res) => {
  */
 export const getQuestionById = async (req, res) => {
   const { question_id } = req.params;
-console.log(req.params);
+  console.log(req.params);
   const questionIdNum = parseInt(question_id, 10);
   if (isNaN(questionIdNum)) {
     return res
@@ -149,7 +149,7 @@ export const editQuestion = async (req, res) => {
     });
   }
 
-try {
+  try {
     // Check if question exists and belongs to user
     const [rows] = await db
       .promise()
@@ -221,7 +221,7 @@ export const deleteQuestion = async (req, res) => {
         message: "You are not allowed to delete this question",
       });
     }
-     res.status(200).json({
+    res.status(200).json({
       message: "Question deleted successfully",
     });
   } catch (err) {
@@ -232,4 +232,3 @@ export const deleteQuestion = async (req, res) => {
     });
   }
 };
-

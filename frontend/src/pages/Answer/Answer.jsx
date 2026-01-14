@@ -1,57 +1,53 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link} from "react-router-dom";
-import "./Answer.css";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
 import api from "../../Api/axios";
 import { useAuth } from "../../context/AuthContext";
-import { toast } from "react-toastify";
+import "./Answer.css";
 
 const Answer = () => {
   const { question_id } = useParams();
-  const [question, setQuestion] = useState(null);
-  const [answers, setAnswers] = useState([]);
-  const [newAnswer, setNewAnswer] = useState("");
-  const [votes, setVotes] = useState({});
-  const [editingId, setEditingId] = useState(null);
-  const [editText, setEditText] = useState("");
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const [question, setQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [newAnswer, setNewAnswer] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  // Redirect unauthenticated users
   useEffect(() => {
     if (!user) navigate("/");
   }, [user, navigate]);
 
+  // Fetch question and answers
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
+
         const qRes = await api.get(`/question/${question_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        setQuestion(qRes.data.question);
+
         const aRes = await api.get(`/answer/${question_id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setQuestion(qRes.data.question);
         setAnswers(aRes.data.answers || []);
-        const initialVotes = {};
-        (aRes.data.answers || []).forEach(
-          (a) =>
-            (initialVotes[a.answer_id] = {
-              up: a.upvotes || 0,
-              down: a.downvotes || 0,
-            })
-        );
-        setVotes(initialVotes);
-      } catch {
+      } catch (err) {
+        console.error(err);
         toast.error("Failed to load data");
       }
     };
     fetchData();
   }, [question_id]);
 
+  // Post a new answer
   const handlePostAnswer = async () => {
     if (!newAnswer.trim()) return;
-
     try {
       const token = localStorage.getItem("token");
       await api.post(
@@ -60,31 +56,73 @@ const Answer = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // 🔁 REFRESH answers
       const res = await api.get(`/answer/${question_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      setAnswers(res.data.answers);
+      setAnswers(res.data.answers || []);
       setNewAnswer("");
-      toast.success("Answer posted");
-    } catch {
+      toast.success("Answer posted successfully");
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to post answer");
     }
   };
 
-  const handleVote = (answer_id, type) =>
-    setVotes((prev) => {
-      const v = prev[answer_id] || { up: 0, down: 0 };
-      return {
-        ...prev,
-        [answer_id]: {
-          up: type === "up" ? v.up + 1 : v.up,
-          down: type === "down" ? v.down + 1 : v.down,
-        },
-      };
-    });
+  // Vote handling (upvote/downvote)
+  const handleVote = async (answer_id, type) => {
+    try {
+      const token = localStorage.getItem("token");
+      await api.post(
+        `/answer/vote/${answer_id}`,
+        { voteType: type === "up" ? "upvote" : "downvote" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
+      // Optimistic UI update
+      setAnswers((prev) =>
+        prev.map((a) => {
+          if (a.answer_id !== answer_id) return a;
+
+          let likes = a.likes;
+          let dislikes = a.dislikes;
+          let userVote = a.userVote || null;
+
+          if (type === "up") {
+            if (userVote === "upvote") {
+              likes -= 1;
+              userVote = null;
+            } else if (userVote === "downvote") {
+              dislikes -= 1;
+              likes += 1;
+              userVote = "upvote";
+            } else {
+              likes += 1;
+              userVote = "upvote";
+            }
+          } else {
+            if (userVote === "downvote") {
+              dislikes -= 1;
+              userVote = null;
+            } else if (userVote === "upvote") {
+              likes -= 1;
+              dislikes += 1;
+              userVote = "downvote";
+            } else {
+              dislikes += 1;
+              userVote = "downvote";
+            }
+          }
+
+          return { ...a, likes, dislikes, userVote };
+        })
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Voting failed");
+    }
+  };
+
+  // Start editing
   const startEdit = (ans) => {
     setEditingId(ans.answer_id);
     setEditText(ans.answer);
@@ -93,6 +131,8 @@ const Answer = () => {
     setEditingId(null);
     setEditText("");
   };
+
+  // Save edited answer
   const saveEdit = async (answer_id) => {
     try {
       const token = localStorage.getItem("token");
@@ -101,18 +141,21 @@ const Answer = () => {
         { answer: editText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       setAnswers((prev) =>
         prev.map((a) =>
           a.answer_id === answer_id ? { ...a, answer: editText } : a
         )
       );
       cancelEdit();
-      toast.success("Answer updated");
-    } catch {
+      toast.success("Answer updated successfully");
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to update answer");
     }
   };
 
+  // Delete answer
   const deleteAnswer = async (answer_id) => {
     if (!window.confirm("Delete this answer?")) return;
     try {
@@ -122,14 +165,16 @@ const Answer = () => {
       });
 
       setAnswers((prev) => prev.filter((a) => a.answer_id !== answer_id));
-      toast.success("Answer deleted");
-    } catch {
+      toast.success("Answer deleted successfully");
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to delete answer");
     }
   };
 
   return (
     <div className="answer-container">
+      {/* Question Card */}
       {question && (
         <div className="question-card">
           <span className="question-label">QUESTION</span>
@@ -137,8 +182,9 @@ const Answer = () => {
           <p className="question-description">{question.description}</p>
         </div>
       )}
+
+      {/* Answers List */}
       {answers.map((ans) => {
-        const voteCount = votes[ans.answer_id] || { up: 0, down: 0 };
         const isOwner = user?.username === ans.username;
         const isEditing = editingId === ans.answer_id;
 
@@ -148,6 +194,7 @@ const Answer = () => {
               <FaUserCircle className="user-icon" />
               <span className="username">{ans.username}</span>
             </div>
+
             <div className="answer-content">
               {isEditing ? (
                 <div>
@@ -165,6 +212,7 @@ const Answer = () => {
               ) : (
                 <div>
                   <p className="answer-text">{ans.answer}</p>
+
                   <div className="answer-actions">
                     {isOwner && (
                       <div>
@@ -174,13 +222,20 @@ const Answer = () => {
                         </button>
                       </div>
                     )}
-                    <button onClick={() => handleVote(ans.answer_id, "up")}>
-                      👍 {voteCount.up}
+                    <button
+                      className={ans.userVote === "upvote" ? "voted" : ""}
+                      onClick={() => handleVote(ans.answer_id, "up")}
+                    >
+                      👍 {ans.likes}
                     </button>
-                    <button onClick={() => handleVote(ans.answer_id, "down")}>
-                      👎 {voteCount.down}
+                    <button
+                      className={ans.userVote === "downvote" ? "voted" : ""}
+                      onClick={() => handleVote(ans.answer_id, "down")}
+                    >
+                      👎 {ans.dislikes}
                     </button>
                   </div>
+
                   {ans.created_at && (
                     <span className="answer-date">
                       {new Date(ans.created_at).toLocaleString()}
@@ -192,12 +247,14 @@ const Answer = () => {
           </div>
         );
       })}
+
       <div className="text-center mb-3">
         <Link to="/home" className="text-decoration-none">
           Go to question page
         </Link>
       </div>
 
+      {/* New Answer Form */}
       <div className="answer-form">
         <h4 className="form-title">Your Answer</h4>
         <textarea

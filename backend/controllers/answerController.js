@@ -186,10 +186,10 @@ export const voteAnswer = async (req, res) => {
       if (currentVote === voteType) {
         await db
           .promise()
-          .query(
-            "DELETE FROM answer_votes WHERE user_id = ? AND answer_id = ?",
-            [user_id, answer_id]
-          );
+          .query("DELETE FROM answer WHERE user_id = ? AND answer_id = ?", [
+            user_id,
+            answer_id,
+          ]);
 
         const column = voteType === "upvote" ? "likes" : "dislikes";
         await db
@@ -208,7 +208,7 @@ export const voteAnswer = async (req, res) => {
       await db
         .promise()
         .query(
-          "UPDATE answer_votes SET vote_type = ? WHERE user_id = ? AND answer_id = ?",
+          "UPDATE answer SET vote_type = ? WHERE user_id = ? AND answer_id = ?",
           [voteType, user_id, answer_id]
         );
 
@@ -240,15 +240,15 @@ export const voteAnswer = async (req, res) => {
     res.json({ msg: "Vote added" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "Voting failed" });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Voting two times is not allowed" });
   }
 };
-
 /**
  * Edit an existing answer
  * Endpoint: PUT /api/answer/:id
  */
-
 export const editAnswer = async (req, res) => {
   const user_id = req.user.id;
   const answer_id = req.params.answer_id;
