@@ -1,6 +1,5 @@
 import db from "../config/database.js";
 import { StatusCodes } from "http-status-codes";
-import createNotification from "../utils/createNotification.js";
 
 /**
  * Post a new answer for a question
@@ -12,12 +11,15 @@ export const postAnswer = async (req, res) => {
   let { answer } = req.body;
   const user_id = req.user?.id;
 
+  // Validate authentication
   if (!user_id) {
-    return res
-      .status(401)
-      .json({ error: "Unauthorized", message: "Authentication required" });
+    return res.status(401).json({
+      error: "Unauthorized",
+      message: "Authentication required",
+    });
   }
 
+  // Validate question_id
   if (!question_id || isNaN(parseInt(question_id, 10))) {
     return res.status(400).json({
       error: "Bad Request",
@@ -25,15 +27,18 @@ export const postAnswer = async (req, res) => {
     });
   }
 
+  // Validate answer content
   if (!answer || answer.trim() === "") {
-    return res
-      .status(400)
-      .json({ error: "Bad Request", message: "Please provide answer" });
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Please provide answer",
+    });
   }
 
   answer = answer.trim();
 
   try {
+    // Check if the question exists
     const [questionRows] = await db
       .promise()
       .query(
@@ -48,25 +53,13 @@ export const postAnswer = async (req, res) => {
       });
     }
 
-    const questionOwnerId = questionRows[0].user_id;
-
+    // Insert the answer
     const [result] = await db
       .promise()
       .query(
         "INSERT INTO answers (question_id, user_id, answer) VALUES (?, ?, ?)",
         [question_id, user_id, answer]
       );
-
-    if (questionOwnerId !== user_id) {
-      await createNotification({
-        user_id: questionOwnerId,
-        sender_id: user_id,
-        type: "answer",
-        target_id: question_id,
-        target_type: "question",
-        message: "Your question has a new answer!",
-      });
-    }
 
     res.status(201).json({
       message: "Answer posted successfully",
@@ -75,11 +68,12 @@ export const postAnswer = async (req, res) => {
   } catch (err) {
     console.error("Post answer error:", err);
     res.status(500).json({
-      error: "Internal Server Error occured",
+      error: "Internal Server Error occurred",
       message: "An unexpected error occurred",
     });
   }
 };
+
 /**
  * Get all answers for a specific question
  * Endpoint: GET /api/answer/:question_id
