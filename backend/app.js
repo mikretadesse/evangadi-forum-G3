@@ -8,8 +8,6 @@ import questionRoutes from "./routes/questionRoutes.js";
 import answerRoutes from "./routes/answerRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import passwordRoutes from "./routes/passwordRoutes.js";
-// import aiRoutes from "./routes/aiRoutes.js";
-import notificationRoutes from "./routes/notificationRoutes.js";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -24,8 +22,6 @@ app.use("/api/question", questionRoutes);
 app.use("/api/answer", answerRoutes);
 app.use("/api/auth", passwordRoutes);
 app.use("/api/comments", commentRoutes);
-// app.use("/api/ai", aiRoutes);
-app.use("/api/notifications", notificationRoutes);
 
 // ----------Default route----------//
 app.get("/", (req, res) => {

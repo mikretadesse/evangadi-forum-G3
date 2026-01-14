@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import NotificationBell from "../Notification/NotificationBell.jsx";
 import logo from "../../assets/images/evangadi-logo-home.png";
 import styles from "./Header.module.css";
 
@@ -24,9 +23,6 @@ const Header = () => {
           <Link to="/how-it-works" className={styles.navLink}>
             How it Works
           </Link>
-
-          {/* Show Notification Bell only if logged in */}
-          {isLoggedIn && <NotificationBell />}
 
           {/* Login / Logout */}
           {isLoggedIn ? (

@@ -16,8 +16,7 @@ function Footer() {
             <a
               href="https://www.facebook.com/Evangaditech"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               <i className="fa-brands fa-facebook"></i>
             </a>
           </div>
@@ -26,8 +25,7 @@ function Footer() {
             <a
               href="https://www.instagram.com/evangaditech/"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               <i className="fa-brands fa-instagram"></i>
             </a>
           </div>
@@ -36,8 +34,7 @@ function Footer() {
             <a
               href="https://www.youtube.com/c/evangaditech"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               <i className="fa-brands fa-youtube"></i>
             </a>
           </div>
