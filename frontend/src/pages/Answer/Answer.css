@@ -1,129 +1,209 @@
+/* ===== Container ===== */
 .answer-container {
   max-width: 900px;
-  margin: 30px auto;
-  font-family: "Inter", sans-serif;
-  color: #111827;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #1f2937;
+  position: relative;
 }
 
-.question-card {
-  background: linear-gradient(135deg, #eef2ff, #f0f5ff);
-  border-radius: 20px;
-  padding: 28px;
-  margin-bottom: 30px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-  font-family: Arial, Helvetica, sans-serif;
-}
-.question-label {
-  font-size: 16px;
-  font-weight: 700;
+/* ===== Back Link Top Right ===== */
+.back-link {
+  position: absolute;
+  right: 20px;
+  top: 20px;
   color: #4f46e5;
-  text-transform: uppercase;
-}
-.question-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 12px 0;
-}
-.question-description {
-  font-size: 16px;
-  line-height: 1.7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.answer-card {
-  display: flex;
-  gap: 20px;
-  padding: 20px 24px;
-  background: #fff;
-  border-radius: 20px;
-  margin-bottom: 22px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+.back-link:hover {
+  color: #4338ca;
+  text-decoration: underline;
 }
-.answer-avatar {
-  flex-shrink: 0;
+
+/* ===== Question Card ===== */
+.question-card {
+  background-color: #ffffff;
+  border-left: 5px solid #4f46e5;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.question-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.question-card p {
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* ===== Answer Card ===== */
+.answer-card {
+  background-color: #f9fafb;
+  padding: 18px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  position: relative;
+  transition: background 0.2s ease;
 }
-.user-icon {
-  font-size: 54px;
-  color: gray;
+
+.answer-card:hover {
+  background-color: #ffffff;
 }
+
+/* ===== User Info ===== */
+.answer-card > svg {
+  font-size: 36px;
+  color: #6b7280;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
 .username {
-  font-weight: 700;
-  font-size: 14px;
-  margin-top: 6px;
+  font-weight: 600;
+  color: #111827;
+  display: inline-block;
+  margin-bottom: 8px;
 }
 
-.answer-content {
-  flex: 2;
-}
+/* ===== Answer Text ===== */
 .answer-text {
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 14px;
+  margin: 10px 0;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
+/* ===== Action Row ===== */
 .answer-actions {
   display: flex;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-.answer-actions button {
-  border: none;
-  border-radius: 12px;
-  padding: 6px 14px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  background: #eef2ff;
-  color: #4f46e5;
-}
-.answer-actions button:nth-child(2) {
-  background: #fee2e2;
-  color: #b91c1c;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
 }
 
-.answer-date {
-  display: block;
-  text-align: left;
-  font-size: 12px;
-  color: #6b7280;
+.answer-actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #e5e7eb;
+  color: #374151;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
-.answer-form {
-  margin-top: 50px;
-  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
-  padding: 28px;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+
+.answer-actions button:hover {
+  background-color: #4f46e5;
+  color: #ffffff;
 }
-.answer-form textarea {
+
+/* Owner-specific buttons */
+.answer-actions .edit-btn:hover {
+  background-color: #fbbf24;
+  color: #1f2937;
+}
+
+.answer-actions .delete-btn:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+/* ===== Edit Mode ===== */
+.edit-mode {
+  background-color: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.edit-notice {
+  font-size: 13px;
+  font-weight: 500;
+  color: #92400e;
+  margin-bottom: 8px;
+}
+
+/* ===== Textareas ===== */
+textarea {
   width: 100%;
-  min-height: 140px;
-  padding: 16px 18px;
-  font-size: 15px;
-  border-radius: 14px;
+  min-height: 100px;
+  padding: 12px;
+  border-radius: 6px;
   border: 1px solid #d1d5db;
   resize: vertical;
-}
-.answer-form button {
-  margin-top: 18px;
-  padding: 10px 26px;
-  border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: #fff;
   font-size: 14px;
-  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 4px rgba(79, 70, 229, 0.4);
+}
+
+/* ===== Post Answer Button ===== */
+button.post-answer {
+  background-color: #4f46e5;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+button.post-answer:hover {
+  background-color: #4338ca;
+}
+
+/* ===== Date / Time ===== */
+.answer-date {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* ===== Edit / Delete Button Spacing in Actions Row ===== */
+.answer-actions .owner-btns {
+  display: flex;
+  gap: 6px;
+}
+
+/* ===== Layout for Answer Card Header ===== */
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ===== Edit / Delete buttons for owner ===== */
+.edit-btn,
+.delete-btn {
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
   cursor: pointer;
 }
 
-.edit-actions button {
-  background: #4f46e5;
-  color: #fff;
+/* ===== Vote Buttons ===== */
+.vote-btn {
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: 5px;
   border: none;
-  padding: 6px 16px;
-  border-radius: 10px;
   cursor: pointer;
-  font-size: 13px;
 }
