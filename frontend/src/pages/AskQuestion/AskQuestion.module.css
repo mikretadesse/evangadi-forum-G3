@@ -4,78 +4,159 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
-.stepsSection {
-  background: #ffff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.stepsSection h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #e67e22;
-  display: inline-block;
-}
-
-.stepsSection li {
-  font-size: 16px;
+/* Steps Card */
+.stepsHorizontal {
+  background: #ffffff;
+  padding: 35px 30px;
+  border-radius: 12px;
   margin-bottom: 10px;
-  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
 }
 
+.stepsHorizontal h2 {
+  font-size: 22px;
+  color: #e67e22;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #e67e22;
+  display: inline-block;
+  padding-bottom: 3px;
+}
+
+/* Steps list as grid with 2 columns on desktop */
+.stepsList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  counter-reset: step;
+}
+
+.stepItem {
+  background-color: #fdf5e6;
+  color: #e67e22;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  counter-increment: step;
+}
+
+.stepItem::before {
+  content: counter(step) ". ";
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* Form Section */
 .formSection {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
+  background: #ffffff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 .formSection h2 {
   text-align: center;
-  margin-bottom: 16px;
-  font-size: 24px;
+  margin-bottom: 18px;
+  font-size: 26px;
+  color: #007bff;
 }
 
 .formSection form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .formSection input,
 .formSection textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px 15px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
-.formSection textarea{
-  min-height: 150px;   
-  resize: vertical;    
+.formSection input:focus,
+.formSection textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+.formSection textarea {
+  min-height: 160px;
+  resize: vertical;
 }
 
 .formSection button {
-  width: 150px;
-  padding: 8px;
-  background: #007bff;
+  width: 160px;
+  padding: 10px 0;
+  background: linear-gradient(45deg, #007bff, #00a2ff);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  align-self: flex-start;
 }
 
 .formSection button:hover {
-  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  background: linear-gradient(45deg, #0056b3, #007bff);
 }
 
 .subText {
   display: block;
+  font-size: 16px;
   text-align: center;
-  margin: 0 auto 10px auto;
+  margin-bottom: 15px;
   color: #007bff;
   text-decoration: none;
+}
+
+.subText:hover {
+  color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stepsList {
+    grid-template-columns: 1fr; /* stacked on mobile */
+  }
+
+  .formSection button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepsHorizontal {
+    padding: 15px;
+  }
+
+  .formSection {
+    padding: 15px;
+  }
+
+  .stepsHorizontal h2 {
+    font-size: 18px;
+  }
+
+  .formSection h2 {
+    font-size: 20px;
+  }
+
+  .formSection input,
+  .formSection textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

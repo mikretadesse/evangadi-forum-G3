@@ -1,0 +1,232 @@
+.pageWrapper {
+  width: 90%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Header: Welcome + Ask Question */
+.homeHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0px;
+  flex-wrap: wrap;
+  background-color: #f5f7fa;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.welcomeMsg {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.username {
+  color: #1976d2;
+  font-weight: bold;
+}
+
+.askBtn {
+  background-color: #1976d2;
+  color: #fff;
+  font-weight: bold;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.askBtn:hover {
+  background-color: #125ca1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Search Input */
+.searchBox {
+  margin: 0;
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.searchBox input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
+  outline: none;
+}
+
+/* Questions list */
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.questionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.questionItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.questionLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid #1976d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #1976d2;
+}
+
+.questionText {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.author {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.date {
+  color: #777;
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.arrow {
+  margin-left: 10px;
+  font-size: 22px;
+  color: #1976d2;
+  font-weight: bold;
+}
+
+/* Actions buttons */
+.questionActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.editBtn {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.editBtn:hover {
+  background-color: #45a049;
+}
+
+.deleteBtn {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.deleteBtn:hover {
+  background-color: #d32f2f;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 25px 0;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background-color: #70767d;
+  color: #fff;
+  border: none;
+  padding: 6px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #125ca1;
+}
+
+.pagination span {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 568px) {
+  .homeHead {
+    /* flex-direction: column; */
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .questionItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .questionActions {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchBox input {
+    font-size: 0.9rem;
+  }
+
+  .askBtn {
+    padding: 6px 14px;
+    font-size: 0.95rem;
+  }
+}

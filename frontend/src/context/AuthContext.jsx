@@ -2,20 +2,16 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 // Create context
 const AuthContext = createContext();
-
 // Custom hook to use the context
 export const useAuth = () => useContext(AuthContext);
-
 // Provider component
 export const AuthProvider = ({ children }) => {
   // Store token and user in state
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
-
   // CORRECT PLACEMENT: Define isLoggedIn inside the component
   const isLoggedIn = !!token;
-
   // On mount, load from localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

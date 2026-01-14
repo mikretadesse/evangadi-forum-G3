@@ -71,14 +71,11 @@ export const postAnswer = async (req, res) => {
     res.status(201).json({
       message: "Answer posted successfully",
       answer_id: result.insertId,
-      question_id,
-      user_id,
-      answer,
     });
   } catch (err) {
     console.error("Post answer error:", err);
     res.status(500).json({
-      error: "Internal Server Error",
+      error: "Internal Server Error occured",
       message: "An unexpected error occurred",
     });
   }
@@ -117,7 +114,7 @@ export const getAllAnswer = async (req, res) => {
   } catch (error) {
     console.error("Get answers error:", error.message);
     res.status(500).json({
-      error: "Internal Server Error",
+      error: "Internal Server Error occured",
       message: "An unexpected error occurred",
     });
   }
@@ -165,68 +162,6 @@ export const deleteAnswer = async (req, res) => {
  * Vote (like/dislike) an answer
  * Endpoint: POST /api/answer/vote/:id
  */
-// export const voteAnswer = async (req, res) => {
-//   const user_id = req.user.id;
-//   const answer_id = req.params.id;
-//   const { voteType } = req.body;
-
-//   if (!["upvote", "downvote"].includes(voteType)) {
-//     return res.status(400).json({ msg: "Invalid vote type" });
-//   }
-
-//   try {
-//     const [existingVote] = await db.query(
-//       "SELECT vote_type FROM answer_votes WHERE user_id = ? AND answer_id = ?",
-//       [user_id, answer_id]
-//     );
-
-//     if (existingVote.length > 0) {
-//       const currentVote = existingVote[0].vote_type;
-
-//       if (currentVote === voteType) {
-//         // Remove vote
-//         await db.query(
-//           "DELETE FROM answer_votes WHERE userid = ? AND answer_id = ?",
-//           [user_id, answer_id]
-//         );
-//         const column = voteType === "upvote" ? "likes" : "dislikes";
-//         await db.query(
-//           `UPDATE answers SET ${column} = ${column} - 1 WHERE answer_id = ?`,
-//           [answer_id]
-//         );
-//         return res.status(200).json({ msg: `${voteType} removed` });
-//       } else {
-//         // Switch vote
-//         const addColumn = voteType === "upvote" ? "likes" : "dislikes";
-//         const removeColumn = voteType === "upvote" ? "dislikes" : "likes";
-//         await db.query(
-//           "UPDATE answer_votes SET vote_type = ? WHERE userid = ? AND answer_id = ?",
-//           [voteType, user_id, answer_id]
-//         );
-//         await db.query(
-//           `UPDATE answers SET ${addColumn} = ${addColumn} + 1, ${removeColumn} = ${removeColumn} - 1 WHERE answer_id = ?`,
-//           [answer_id]
-//         );
-//         return res.status(200).json({ msg: `Vote changed to ${voteType}` });
-//       }
-//     } else {
-//       // Add new vote
-//       const column = voteType === "upvote" ? "likes" : "dislikes";
-//       await db.query(
-//         "INSERT INTO answer_votes (userid, answer_id, vote_type) VALUES (?, ?, ?)",
-//         [user_id, answer_id, voteType]
-//       );
-//       await db.query(
-//         `UPDATE answers SET ${column} = ${column} + 1 WHERE answer_id = ?`,
-//         [answer_id]
-//       );
-//       return res.status(200).json({ msg: `${voteType} added` });
-//     }
-//   } catch (error) {
-//     console.error("Vote error:", error.message);
-//     res.status(500).json({ msg: "Server error while voting" });
-//   }
-// };
 
 export const voteAnswer = async (req, res) => {
   const user_id = req.user.id;
@@ -344,31 +279,6 @@ export const editAnswer = async (req, res) => {
 /**
  * COMMENT FUNCTIONS
  */
-// export const addComment = async (req, res) => {
-//   const user_id = req.user.user_id;
-//   const answer_id = req.params.answer_id;
-//   const { content } = req.body;
-
-//   if (!content || !content.trim())
-//     return res
-//       .status(StatusCodes.BAD_REQUEST)
-//       .json({ error: "Bad Request", msg: "Comment content cannot be empty" });
-
-//   try {
-//     await db.query(
-//       "INSERT INTO comments (answer_id, user_id, content) VALUES (?, ?, ?)",
-//       [answer_id, user_id, content]
-//     );
-//     res.status(StatusCodes.CREATED).json({ msg: "Comment added successfully" });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-//       error: "Internal Server Error",
-//       msg: "An unexpected error occurred",
-//     });
-//   }
-// };
-
 export const addComment = async (req, res) => {
   const user_id = req.user.id;
   const answer_id = req.params.answer_id;
@@ -382,33 +292,6 @@ export const addComment = async (req, res) => {
     );
   res.status(201).json({ msg: "Comment added" });
 };
-
-// export const getComments = async (req, res) => {
-//   const answer_id = req.params.answer_id;
-
-//   try {
-//     const [comments] = await db.query(
-//       `SELECT
-//         comments.comment_id,
-//         comments.content,
-//         comments.created_at,
-//         users.username,
-//         users.user_id
-//       FROM comments
-//       JOIN users ON comments.user_id = users.user_id
-//       WHERE comments.answer_id = ?`,
-//       [answer_id]
-//     );
-
-//     res.status(StatusCodes.OK).json({ comments });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-//       error: "Internal Server Error",
-//       msg: "An unexpected error occurred",
-//     });
-//   }
-// };
 
 export const getComments = async (req, res) => {
   const answer_id = req.params.answer_id;
