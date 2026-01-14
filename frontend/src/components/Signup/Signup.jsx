@@ -44,7 +44,6 @@ const Signup = ({ switchToLogin }) => {
       });
 
       localStorage.getItem("token", data.token);
-      // console.log(data);
       navigate("/home");
     } catch (err) {
       setError(

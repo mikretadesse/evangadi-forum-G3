@@ -1,7 +1,6 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
 dotenv.config();
-
 const database = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -12,7 +11,6 @@ const database = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
 // Test the database connection
 database.getConnection((err, connection) => {
   if (err) {
@@ -23,5 +21,4 @@ database.getConnection((err, connection) => {
     connection.release();
   }
 });
-
 export default database;

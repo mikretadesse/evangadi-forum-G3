@@ -13,7 +13,6 @@ const router = express.Router();
  * POST /api/answer
  * Protected route
  */
-
 router.post("/vote/:answer_id", authenticateToken, voteAnswer);
 router.delete("/:answer_id", authenticateToken, deleteAnswer);
 router.put("/:answer_id", authenticateToken, editAnswer);
