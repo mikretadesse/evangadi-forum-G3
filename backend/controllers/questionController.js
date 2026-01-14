@@ -55,7 +55,10 @@ export const getQuestionById = async (req, res) => {
     // 1. Fetch question by ID
     const [rows] = await db
       .promise()
-      .query("SELECT * FROM questions WHERE question_id = ?", [questionIdNum]);
+      .query(
+        "SELECT question_id, title, description, user_id FROM questions WHERE question_id = ?",
+        [questionIdNum]
+      );
 
     // 2. Check if question exists
     if (rows.length === 0)
@@ -194,39 +197,56 @@ export const editQuestion = async (req, res) => {
  */
 export const deleteQuestion = async (req, res) => {
   const { question_id } = req.params;
-  const user_id = req.user?.id;
-  const questionIdNum = parseInt(question_id, 10);
-  if (isNaN(questionIdNum)) {
+  const userId = req.user?.id;
+
+  const questionId = Number(question_id);
+  if (!Number.isInteger(questionId)) {
     return res.status(400).json({
       error: "Bad Request",
       message: "Question ID must be a valid number",
     });
   }
+
   try {
-    // Check if question exists and belongs to user
+    // 1. Verify question exists and get owner
     const [rows] = await db
       .promise()
-      .query("SELECT user_id FROM questions WHERE question_id = ?", [
-        questionIdNum,
-      ]);
+      .query(
+        "SELECT user_id FROM questions WHERE question_id = ?",
+        [questionId]
+      );
+
     if (rows.length === 0) {
       return res.status(404).json({
         error: "Not Found",
         message: "Question not found",
       });
     }
-    if (rows[0].user_id !== user_id) {
+
+    // 2. Authorization check
+    if (rows[0].user_id !== userId) {
       return res.status(403).json({
         error: "Forbidden",
         message: "You are not allowed to delete this question",
       });
     }
-    res.status(200).json({
+
+    // 3. Delete question
+    await db
+      .promise()
+      .query(
+        "DELETE FROM questions WHERE question_id = ?",
+        [questionId]
+      );
+
+    // 4. Success response
+    return res.status(200).json({
       message: "Question deleted successfully",
+      question_id: questionId,
     });
   } catch (err) {
     console.error("Delete question error:", err);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Internal Server Error",
       message: "An unexpected error occurred.",
     });

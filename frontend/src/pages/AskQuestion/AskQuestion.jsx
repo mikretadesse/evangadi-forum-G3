@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from"./AskQuestion.module.css";
+import styles from "./AskQuestion.module.css";
 import api from "../../Api/axios";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
@@ -22,7 +22,7 @@ const AskQuestion = () => {
   // Prevent rendering if user is not logged in
   if (!user) return null;
 
-  // Submit Question 
+  // Submit Question
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -56,30 +56,37 @@ const AskQuestion = () => {
       // Redirect user to home page after a short delay
       setTimeout(() => navigate("/home"), 1000);
     } catch (error) {
-
       // Display server-side or generic error message
       setError(error.response?.data?.message || "Failed to post question.");
-    }finally {
+    } finally {
       setPosting(false);
     }
   };
 
   return (
     <div className={styles.pageWrapper}>
-      {/* Instruction */}
-      <div className={styles.stepsSection}>
+      {/* Instruction / Tips Card */}
+      <div className={styles.stepsHorizontal}>
         <h2>Steps to Write a Good Question</h2>
-        <ul>
-          <li>Summarize your problem in a one-line title.</li>
-          <li>Describe your problem in detail.</li>
-          <li>Explain what you tried and what you expected.</li>
-          <li>Review your question before posting.</li>
-        </ul>
+        <div className={styles.stepsList}>
+          <div className={styles.stepItem}>
+            Summarize your problem in a one-line title.
+          </div>
+          <div className={styles.stepItem}>
+            Describe your problem in detail.
+          </div>
+          <div className={styles.stepItem}>
+            Explain what you tried and what you expected.
+          </div>
+          <div className={styles.stepItem}>
+            Review your question before posting.
+          </div>
+        </div>
       </div>
 
-    {/* Answer Submmition form */}
+      {/* Question Form */}
       <div className={styles.formSection}>
-        <h2>Ask a public question</h2>
+        <h2>Ask a Public Question</h2>
         <Link to="/home" className={styles.subText}>
           Go to Home page
         </Link>
@@ -100,8 +107,8 @@ const AskQuestion = () => {
           />
 
           <button type="submit" disabled={posting}>
-          {posting ? " Posting..." : "Post Question"}
-        </button>
+            {posting ? "Posting..." : "Post Question"}
+          </button>
         </form>
       </div>
     </div>
@@ -111,9 +118,9 @@ const AskQuestion = () => {
 export default AskQuestion;
 
 /**
-   * Handles question submission
-   * - Validates input fields
-   * - Sends POST request to backend
-   * - Shows toast notifications
-   * - Redirects user on success
-   */
+ * Handles question submission
+ * - Validates input fields
+ * - Sends POST request to backend
+ * - Shows toast notifications
+ * - Redirects user on success
+ */

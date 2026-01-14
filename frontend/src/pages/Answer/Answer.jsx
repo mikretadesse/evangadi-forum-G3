@@ -1,15 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+<<<<<<< HEAD
 import { FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import api from "../../Api/axios";
 import { useAuth } from "../../context/AuthContext";
 import "./Answer.css";
+=======
+import "./Answer.css";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../Api/axios";
+import { toast } from "react-toastify";
+import AnswerCard from "./AnswerCard";
+>>>>>>> main
 
 const Answer = () => {
   const { question_id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [question, setQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [votes, setVotes] = useState({});
+  const [newAnswer, setNewAnswer] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
 
   const [question, setQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -22,6 +36,7 @@ const Answer = () => {
     if (!user) navigate("/");
   }, [user, navigate]);
 
+<<<<<<< HEAD
   // Fetch question and answers
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +57,31 @@ const Answer = () => {
         toast.error("Failed to load data");
       }
     };
+=======
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data: qData } = await api.get(`/question/${question_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const { data: aData } = await api.get(`/answer/${question_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setQuestion(qData.question || null);
+      setAnswers(aData.answers || []);
+      const v = {};
+      (aData.answers || []).forEach(
+        (a) => (v[a.answer_id] = { up: a.likes || 0, down: a.dislikes || 0 })
+      );
+      setVotes(v);
+    } catch {
+      toast.error("Failed to load data");
+    }
+  };
+
+  useEffect(() => {
+>>>>>>> main
     fetchData();
   }, [question_id]);
 
@@ -55,6 +95,7 @@ const Answer = () => {
         { answer: newAnswer },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+<<<<<<< HEAD
 
       const res = await api.get(`/answer/${question_id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -64,10 +105,17 @@ const Answer = () => {
       toast.success("Answer posted successfully");
     } catch (err) {
       console.error(err);
+=======
+      setNewAnswer("");
+      fetchData();
+      toast.success("Answer posted");
+    } catch {
+>>>>>>> main
       toast.error("Failed to post answer");
     }
   };
 
+<<<<<<< HEAD
   // Vote handling (upvote/downvote)
   const handleVote = async (answer_id, type) => {
     try {
@@ -172,16 +220,21 @@ const Answer = () => {
     }
   };
 
+=======
+>>>>>>> main
   return (
     <div className="answer-container">
       {/* Question Card */}
       {question && (
         <div className="question-card">
-          <span className="question-label">QUESTION</span>
-          <h2 className="question-title">{question.title}</h2>
-          <p className="question-description">{question.description}</p>
+          <h2>{question.title}</h2>
+          <p>{question.description}</p>
+          <Link to="/home" className="back-link">
+            ← Back to Questions
+          </Link>
         </div>
       )}
+<<<<<<< HEAD
 
       {/* Answers List */}
       {answers.map((ans) => {
@@ -253,6 +306,22 @@ const Answer = () => {
           Go to question page
         </Link>
       </div>
+=======
+
+      {answers.map((ans) => (
+        <AnswerCard
+          key={ans.answer_id}
+          ans={ans}
+          votes={votes[ans.answer_id] || { up: 0, down: 0 }}
+          user={user}
+          editingId={editingId}
+          setEditingId={setEditingId}
+          editText={editText}
+          setEditText={setEditText}
+          fetchData={fetchData}
+        />
+      ))}
+>>>>>>> main
 
       {/* New Answer Form */}
       <div className="answer-form">
@@ -262,9 +331,7 @@ const Answer = () => {
           value={newAnswer}
           onChange={(e) => setNewAnswer(e.target.value)}
         />
-        <div className="form-actions">
-          <button onClick={handlePostAnswer}>Post Answer</button>
-        </div>
+        <button onClick={handlePostAnswer}>Post Answer</button>
       </div>
     </div>
   );
