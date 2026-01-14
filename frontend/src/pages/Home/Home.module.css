@@ -1,6 +1,7 @@
 .pageWrapper {
   width: 90%;
   margin: 30px auto;
+  min-height: 75vh;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -56,7 +57,7 @@
 
 .searchBox input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;

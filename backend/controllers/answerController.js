@@ -1,458 +1,152 @@
-// import db from "../config/database.js";
-// import { StatusCodes } from "http-status-codes";
-// import createNotification from "../utils/createNotification.js";
-
-// /**
-//  * Post a new answer for a question
-//  * Endpoint: POST /api/answer/:question_id
-//  * Protected route (requires JWT)
-//  */
-// export const postAnswer = async (req, res) => {
-//   const { question_id } = req.params;
-//   let { answer } = req.body;
-//   const user_id = req.user?.id;
-
-//   if (!user_id) {
-//     return res
-//       .status(401)
-//       .json({ error: "Unauthorized", message: "Authentication required" });
-//   }
-
-//   if (!question_id || isNaN(parseInt(question_id, 10))) {
-//     return res.status(400).json({
-//       error: "Bad Request",
-//       message: "Question ID must be a valid number",
-//     });
-//   }
-
-//   if (!answer || answer.trim() === "") {
-//     return res
-//       .status(400)
-//       .json({ error: "Bad Request", message: "Please provide answer" });
-//   }
-
-//   answer = answer.trim();
-
-//   try {
-//     const [questionRows] = await db
-//       .promise()
-//       .query(
-//         "SELECT question_id, user_id FROM questions WHERE question_id = ?",
-//         [question_id]
-//       );
-
-//     if (questionRows.length === 0) {
-//       return res.status(404).json({
-//         error: "Not Found",
-//         message: "The specified question could not be found",
-//       });
-//     }
-
-//     const questionOwnerId = questionRows[0].user_id;
-
-//     const [result] = await db
-//       .promise()
-//       .query(
-//         "INSERT INTO answers (question_id, user_id, answer) VALUES (?, ?, ?)",
-//         [question_id, user_id, answer]
-//       );
-
-//     if (questionOwnerId !== user_id) {
-//       await createNotification({
-//         user_id: questionOwnerId,
-//         sender_id: user_id,
-//         type: "answer",
-//         target_id: question_id,
-//         target_type: "question",
-//         message: "Your question has a new answer!",
-//       });
-//     }
-
-//     res.status(201).json({
-//       message: "Answer posted successfully",
-//       answer_id: result.insertId,
-//     });
-//   } catch (err) {
-//     console.error("Post answer error:", err);
-//     res.status(500).json({
-//       error: "Internal Server Error occured",
-//       message: "An unexpected error occurred",
-//     });
-//   }
-// };
-// /**
-//  * Get all answers for a specific question
-//  * Endpoint: GET /api/answer/:question_id
-//  */
-// export const getAllAnswer = async (req, res) => {
-//   const question_id = req.params.question_id;
-//   try {
-//     const [results] = await db.promise().query(
-//       `SELECT
-//         a.answer_id,
-//         a.answer,
-//         a.likes,
-//         a.dislikes,
-//         u.username,
-//         u.user_id,
-//         u.first_name,
-//         u.last_name,
-//         u.email,
-//         a.created_at
-//       FROM answers a
-//       JOIN users u ON a.user_id = u.user_id
-//       WHERE a.question_id = ?
-//       ORDER BY a.created_at ASC`,
-//       [question_id]
-//     );
-
-//     res.status(200).json({
-//       message: "Answers retrieved successfully",
-//       answers: results,
-//       count: results.length,
-//     });
-//   } catch (error) {
-//     console.error("Get answers error:", error.message);
-//     res.status(500).json({
-//       error: "Internal Server Error occured",
-//       message: "An unexpected error occurred",
-//     });
-//   }
-// };
-
-// /**
-//  * Delete an answer
-//  * Endpoint: DELETE /api/answer/:id
-//  */
-// export const deleteAnswer = async (req, res) => {
-//   const userId = req.user.id;
-//   const answer_id = req.params.answer_id;
-
-//   try {
-//     const [answer] = await db
-//       .promise()
-//       .query("SELECT user_id FROM answers WHERE answer_id = ?", [answer_id]);
-
-//     if (answer.length === 0) {
-//       return res
-//         .status(StatusCodes.NOT_FOUND)
-//         .json({ error: "Not Found", msg: "Answer not found" });
-//     }
-
-//     if (answer[0].user_id !== userId) {
-//       return res.status(StatusCodes.FORBIDDEN).json({
-//         error: "Forbidden",
-//         msg: "You are not authorized to delete this answer",
-//       });
-//     }
-//     await db
-//       .promise()
-//       .query("DELETE FROM answers WHERE answer_id = ?", [answer_id]);
-//     res.status(StatusCodes.OK).json({ msg: "Answer deleted successfully" });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-//       error: "Internal Server Error",
-//       msg: "An unexpected error occurred",
-//     });
-//   }
-// };
-
-// /**
-//  * Vote (like/dislike) an answer
-//  * Endpoint: POST /api/answer/vote/:id
-//  */
-
-// export const voteAnswer = async (req, res) => {
-//   const user_id = req.user.id;
-//   const answer_id = req.params.answer_id;
-//   const { voteType } = req.body;
-
-//   if (!["upvote", "downvote"].includes(voteType)) {
-//     return res.status(400).json({ msg: "Invalid vote type" });
-//   }
-
-//   try {
-//     const [existingVote] = await db
-//       .promise()
-//       .query(
-//         "SELECT vote_type FROM answer_votes WHERE user_id = ? AND answer_id = ?",
-//         [user_id, answer_id]
-//       );
-
-//     if (existingVote.length > 0) {
-//       const currentVote = existingVote[0].vote_type;
-
-//       if (currentVote === voteType) {
-//         await db
-//           .promise()
-//           .query(
-//             "DELETE FROM answer_votes WHERE user_id = ? AND answer_id = ?",
-//             [user_id, answer_id]
-//           );
-
-//         const column = voteType === "upvote" ? "likes" : "dislikes";
-//         await db
-//           .promise()
-//           .query(
-//             `UPDATE answers SET ${column} = ${column} - 1 WHERE answer_id = ?`,
-//             [answer_id]
-//           );
-
-//         return res.json({ msg: "Vote removed" });
-//       }
-
-//       const addCol = voteType === "upvote" ? "likes" : "dislikes";
-//       const remCol = voteType === "upvote" ? "dislikes" : "likes";
-
-//       await db
-//         .promise()
-//         .query(
-//           "UPDATE answer_votes SET vote_type = ? WHERE user_id = ? AND answer_id = ?",
-//           [voteType, user_id, answer_id]
-//         );
-
-//       await db
-//         .promise()
-//         .query(
-//           `UPDATE answers SET ${addCol} = ${addCol} + 1, ${remCol} = ${remCol} - 1 WHERE answer_id = ?`,
-//           [answer_id]
-//         );
-
-//       return res.json({ msg: "Vote updated" });
-//     }
-
-//     await db
-//       .promise()
-//       .query(
-//         "INSERT INTO answer_votes (user_id, answer_id, vote_type) VALUES (?, ?, ?)",
-//         [user_id, answer_id, voteType]
-//       );
-
-//     const column = voteType === "upvote" ? "likes" : "dislikes";
-//     await db
-//       .promise()
-//       .query(
-//         `UPDATE answers SET ${column} = ${column} + 1 WHERE answer_id = ?`,
-//         [answer_id]
-//       );
-
-//     res.json({ msg: "Vote added" });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ msg: "Voting failed" });
-//   }
-// };
-
-// /**
-//  * Edit an existing answer
-//  * Endpoint: PUT /api/answer/:id
-//  */
-
-// export const editAnswer = async (req, res) => {
-//   const user_id = req.user.id;
-//   const answer_id = req.params.answer_id;
-//   const { answer } = req.body;
-
-//   if (!answer || !answer.trim()) {
-//     return res.status(400).json({ msg: "Answer cannot be empty" });
-//   }
-
-//   const [rows] = await db
-//     .promise()
-//     .query("SELECT user_id FROM answers WHERE answer_id = ?", [answer_id]);
-
-//   if (!rows.length) return res.status(404).json({ msg: "Answer not found" });
-//   if (rows[0].user_id !== user_id)
-//     return res.status(403).json({ msg: "Forbidden" });
-
-//   await db
-//     .promise()
-//     .query("UPDATE answers SET answer = ? WHERE answer_id = ?", [
-//       answer,
-//       answer_id,
-//     ]);
-
-//   res.json({ msg: "Answer updated" });
-// };
-
-// /**
-//  * COMMENT FUNCTIONS
-//  */
-// export const addComment = async (req, res) => {
-//   const user_id = req.user.id;
-//   const answer_id = req.params.answer_id;
-//   const { content } = req.body;
-
-//   await db
-//     .promise()
-//     .query(
-//       "INSERT INTO comments (answer_id, user_id, comment_body) VALUES (?, ?, ?)",
-//       [answer_id, user_id, content]
-//     );
-//   res.status(201).json({ msg: "Comment added" });
-// };
-
-// export const getComments = async (req, res) => {
-//   const answer_id = req.params.answer_id;
-
-//   const [comments] = await db.promise().query(
-//     `SELECT
-//       c.comment_id,
-//       c.comment_body AS content,
-//       c.created_at,
-//       u.username,
-//       u.user_id
-//      FROM comments c
-//      JOIN users u ON c.user_id = u.user_id
-//      WHERE c.answer_id = ?`,
-//     [answer_id]
-//   );
-
-//   res.json({ comments });
-// };
-
-// export const deleteComment = async (req, res) => {
-//   const user_id = req.user.user_id;
-//   const comment_id = req.params.comment_id;
-
-//   try {
-//     const [comment] = await db
-//       .promise()
-//       .query("SELECT user_id FROM comments WHERE comment_id = ?", [comment_id]);
-
-//     if (comment.length === 0)
-//       return res
-//         .status(StatusCodes.NOT_FOUND)
-//         .json({ error: "Not Found", msg: "Comment not found" });
-//     if (comment[0].user_id !== user_id)
-//       return res.status(StatusCodes.FORBIDDEN).json({
-//         error: "Forbidden",
-//         msg: "You are not authorized to delete this comment",
-//       });
-
-//     await db
-//       .promise()
-//       .query("DELETE FROM comments WHERE comment_id = ?", [comment_id]);
-//     res.status(StatusCodes.OK).json({ msg: "Comment deleted successfully" });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-//       error: "Internal Server Error",
-//       msg: "An unexpected error occurred",
-//     });
-//   }
-// };
-
 import db from "../config/database.js";
-import { StatusCodes } from "http-status-codes";
 
 /**
  * POST answer
+ * Endpoint: POST /api/answer/:question_id
  */
 export const postAnswer = async (req, res) => {
   const { question_id } = req.params;
-  const { answer } = req.body;
+  let { answer } = req.body; // use let because we trim it
   const user_id = req.user.id;
 
   if (!answer?.trim()) return res.status(400).json({ msg: "Answer required" });
+  if (!question_id || isNaN(parseInt(question_id, 10))) {
+    return res.status(400).json({ msg: "Invalid question ID" });
+  }
 
-  await db
-    .promise()
-    .query(
-      "INSERT INTO answers (question_id, user_id, answer) VALUES (?, ?, ?)",
-      [question_id, user_id, answer.trim()]
-    );
+  answer = answer.trim();
 
-  res.status(201).json({ msg: "Answer posted" });
+  try {
+    const [questionRows] = await db
+      .promise()
+      .query("SELECT question_id FROM questions WHERE question_id=?", [
+        question_id,
+      ]);
+
+    if (!questionRows.length)
+      return res.status(404).json({ msg: "Question not found" });
+
+    const [result] = await db
+      .promise()
+      .query(
+        "INSERT INTO answers (question_id, user_id, answer) VALUES (?, ?, ?)",
+        [question_id, user_id, answer]
+      );
+
+    res
+      .status(201)
+      .json({ msg: "Answer posted successfully", answer_id: result.insertId });
+  } catch (err) {
+    console.error("Post answer error:", err);
+    res.status(500).json({ msg: "Internal server error" });
+  }
 };
 
 /**
- * GET answers
+ * GET all answers for a question
+ * Endpoint: GET /api/answer/:question_id
  */
 export const getAllAnswer = async (req, res) => {
   const { question_id } = req.params;
 
-  const [answers] = await db.promise().query(
-    `SELECT a.answer_id, a.answer, a.likes, a.dislikes, a.created_at,
-            u.username
-     FROM answers a
-     JOIN users u ON a.user_id = u.user_id
-     WHERE a.question_id = ?
-     ORDER BY a.created_at ASC`,
-    [question_id]
-  );
+  try {
+    const [answers] = await db.promise().query(
+      `SELECT a.answer_id, a.answer, a.likes, a.dislikes, a.created_at,
+                u.username, u.user_id
+         FROM answers a
+         JOIN users u ON a.user_id = u.user_id
+         WHERE a.question_id=?
+         ORDER BY a.created_at ASC`,
+      [question_id]
+    );
 
-  res.json({ answers });
+    res.json({ answers });
+  } catch (err) {
+    console.error("Get answers error:", err);
+    res.status(500).json({ msg: "Failed to get answers" });
+  }
 };
 
 /**
  * DELETE answer
+ * Endpoint: DELETE /api/answer/:answer_id
  */
 export const deleteAnswer = async (req, res) => {
   const { answer_id } = req.params;
   const user_id = req.user.id;
 
-  const [rows] = await db
-    .promise()
-    .query("SELECT user_id FROM answers WHERE answer_id = ?", [answer_id]);
+  try {
+    const [rows] = await db
+      .promise()
+      .query("SELECT user_id FROM answers WHERE answer_id=?", [answer_id]);
 
-  if (!rows.length) return res.status(404).json({ msg: "Not found" });
+    if (!rows.length) return res.status(404).json({ msg: "Answer not found" });
+    if (rows[0].user_id !== user_id)
+      return res.status(403).json({ msg: "Forbidden" });
 
-  if (rows[0].user_id !== user_id)
-    return res.status(403).json({ msg: "Forbidden" });
-
-  await db
-    .promise()
-    .query("DELETE FROM answers WHERE answer_id = ?", [answer_id]);
-
-  res.json({ msg: "Deleted" });
+    await db
+      .promise()
+      .query("DELETE FROM answers WHERE answer_id=?", [answer_id]);
+    res.json({ msg: "Answer deleted successfully" });
+  } catch (err) {
+    console.error("Delete answer error:", err);
+    res.status(500).json({ msg: "Delete failed" });
+  }
 };
 
 /**
  * EDIT answer
+ * Endpoint: PUT /api/answer/:answer_id
  */
 export const editAnswer = async (req, res) => {
   const { answer_id } = req.params;
   const { answer } = req.body;
   const user_id = req.user.id;
 
-  const [rows] = await db
-    .promise()
-    .query("SELECT user_id FROM answers WHERE answer_id = ?", [answer_id]);
+  if (!answer?.trim()) return res.status(400).json({ msg: "Answer required" });
 
-  if (!rows.length) return res.status(404).json({ msg: "Not found" });
+  try {
+    const [rows] = await db
+      .promise()
+      .query("SELECT user_id FROM answers WHERE answer_id=?", [answer_id]);
 
-  if (rows[0].user_id !== user_id)
-    return res.status(403).json({ msg: "Forbidden" });
+    if (!rows.length) return res.status(404).json({ msg: "Answer not found" });
+    if (rows[0].user_id !== user_id)
+      return res.status(403).json({ msg: "Forbidden" });
 
-  await db
-    .promise()
-    .query("UPDATE answers SET answer = ? WHERE answer_id = ?", [
-      answer,
-      answer_id,
-    ]);
+    await db
+      .promise()
+      .query("UPDATE answers SET answer=? WHERE answer_id=?", [
+        answer.trim(),
+        answer_id,
+      ]);
 
-  res.json({ msg: "Updated" });
+    res.json({ msg: "Answer updated successfully" });
+  } catch (err) {
+    console.error("Edit answer error:", err);
+    res.status(500).json({ msg: "Update failed" });
+  }
 };
 
 /**
  * VOTE answer
+ * Endpoint: POST /api/answer/vote/:answer_id
  */
 export const voteAnswer = async (req, res) => {
   const { answer_id } = req.params;
-  const { voteType } = req.body;
+  const { voteType } = req.body; // "upvote" or "downvote"
   const user_id = req.user.id;
 
-  const [existing] = await db
-    .promise()
-    .query(
-      "SELECT vote_type FROM answer_votes WHERE user_id=? AND answer_id=?",
-      [user_id, answer_id]
-    );
+  try {
+    const [existing] = await db
+      .promise()
+      .query(
+        "SELECT vote_type FROM answer_votes WHERE user_id=? AND answer_id=?",
+        [user_id, answer_id]
+      );
 
-  if (existing.length) {
-    if (existing[0].vote_type === voteType) {
+    // If the same vote exists, remove it
+    if (existing.length && existing[0].vote_type === voteType) {
       await db
         .promise()
         .query("DELETE FROM answer_votes WHERE user_id=? AND answer_id=?", [
@@ -461,25 +155,30 @@ export const voteAnswer = async (req, res) => {
         ]);
       await db.promise().query(
         `UPDATE answers SET ${voteType === "upvote" ? "likes" : "dislikes"} =
-         ${voteType === "upvote" ? "likes" : "dislikes"} - 1 WHERE answer_id=?`,
+           ${
+             voteType === "upvote" ? "likes" : "dislikes"
+           } - 1 WHERE answer_id=?`,
         [answer_id]
       );
       return res.json({ msg: "Vote removed" });
     }
-  }
 
-  await db
-    .promise()
-    .query(
-      "REPLACE INTO answer_votes (user_id, answer_id, vote_type) VALUES (?, ?, ?)",
-      [user_id, answer_id, voteType]
+    // Insert or update vote
+    await db
+      .promise()
+      .query(
+        "REPLACE INTO answer_votes (user_id, answer_id, vote_type) VALUES (?, ?, ?)",
+        [user_id, answer_id, voteType]
+      );
+    await db.promise().query(
+      `UPDATE answers SET ${voteType === "upvote" ? "likes" : "dislikes"} =
+         ${voteType === "upvote" ? "likes" : "dislikes"} + 1 WHERE answer_id=?`,
+      [answer_id]
     );
 
-  await db.promise().query(
-    `UPDATE answers SET ${voteType === "upvote" ? "likes" : "dislikes"} =
-     ${voteType === "upvote" ? "likes" : "dislikes"} + 1 WHERE answer_id=?`,
-    [answer_id]
-  );
-
-  res.json({ msg: "Vote updated" });
+    res.json({ msg: "Vote updated" });
+  } catch (err) {
+    console.error("Vote answer error:", err);
+    res.status(500).json({ msg: "Vote failed" });
+  }
 };

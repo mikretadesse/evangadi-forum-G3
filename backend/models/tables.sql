@@ -85,3 +85,19 @@ CREATE TABLE IF NOT EXISTS answer_votes (
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   FOREIGN KEY (answer_id) REFERENCES answers(answer_id  ) ON DELETE CASCADE
 );
+
+-- Aditional column for updating (editing) questions
+ALTER TABLE questions
+ADD COLUMN updated_at TIMESTAMP
+DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP;
+
+-- Aditional column for updating (editing) answers
+ALTER TABLE answers
+ADD COLUMN updated_at TIMESTAMP
+DEFAULT CURRENT_TIMESTAMP
+ON UPDATE CURRENT_TIMESTAMP;
+
+ALTER TABLE answers
+ADD COLUMN likes INT DEFAULT 0,
+ADD COLUMN dislikes INT DEFAULT 0;
