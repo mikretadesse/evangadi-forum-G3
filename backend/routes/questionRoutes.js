@@ -16,7 +16,7 @@ router.get("/:question_id", getQuestionById);
 
 // Protected routes
 router.post("/", authenticateToken, postQuestion);
-router.put("/:question_id", authenticateToken, editQuestion);
+router.patch("/:question_id", authenticateToken, editQuestion);
 router.delete("/:question_id", authenticateToken, deleteQuestion);
 
 export default router;
