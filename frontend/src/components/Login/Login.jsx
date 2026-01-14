@@ -16,12 +16,9 @@ const Login = ({ switchToSignup }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("1. Form submitted");
 
     const email = emailRef.current?.value.trim();
     const password = passwordRef.current?.value;
-
-    console.log("2. Email:", email, "Password:", password);
 
     if (!email || !password) {
       setError("Both email and password are required.");
@@ -29,38 +26,25 @@ const Login = ({ switchToSignup }) => {
     }
 
     try {
-      console.log("3. Making API call to /user/login");
-
       const { data } = await api.post(
         "/user/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log("4. API Response:", data);
-      console.log("5. Token received:", data.token?.substring(0, 20) + "...");
-
-      // login saves token and user to global state (and localStorage)
+      // Save token and user globally
       login(data.token, data.user);
 
-      //  IMMEDIATE LOCALSTORAGE CHECK
-      console.log("6. Checking localStorage:");
-      console.log("- Token:", localStorage.getItem("token"));
-      console.log("- User:", localStorage.getItem("user"));
-
-      // clear inputs
+      // Clear inputs
       emailRef.current.value = "";
       passwordRef.current.value = "";
 
-      //  IMMEDIATE REDIRECT
-      console.log("7. Redirecting to /home");
+      // Redirect after successful login
       navigate("/home");
-      // OR force refresh: window.location.href = "/home";
     } catch (err) {
-      console.error("8. Login error:", err);
-      console.error("Error response:", err.response?.data);
       setError(
-        err.response?.data?.message || "Login failed. Please check credentials."
+        err.response?.data?.message ||
+          "Login failed. Please check your credentials."
       );
     }
   };

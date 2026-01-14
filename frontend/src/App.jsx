@@ -11,6 +11,7 @@ import NotFound from "./Pages/NotFound/NotFound";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/ForgotPassword/ResetPassword";
 import HowItWorks from "./pages/HowItWorks/HowItWorks";
+import EditQuestion from "./pages/EditQuestion/EditQuestion";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="how-it-works" element={<HowItWorks />} />
+          <Route path="/EditQuestion/:question_id/edit" element={<EditQuestion />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
