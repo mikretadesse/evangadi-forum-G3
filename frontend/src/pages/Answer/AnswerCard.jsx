@@ -35,7 +35,6 @@ const AnswerCard = ({
           {new Date(ans.created_at).toLocaleString()}
         </span>
       </div>
-
       {/* Show previous answer in textarea if editing, otherwise show answer */}
       {isEditing ? (
         <div className="edit-mode">
@@ -47,7 +46,6 @@ const AnswerCard = ({
       ) : (
         <p className="answer-text">{ans.answer}</p>
       )}
-
       <VoteEdit
         answer_id={ans.answer_id}
         votes={votes}

@@ -76,13 +76,16 @@ const Answer = () => {
       {question && (
         <div className="question-card">
           <h2 className="title">QUESTION</h2>
-          <h3>{question.title}</h3>
+          <h4>{question.title}</h4>
           <p>{question.description}</p>
           <Link to="/home" className="back-link">
             ← Back to Questions
           </Link>
         </div>
       )}
+      <div>
+        <h2>Answers from the evangadi community: ({answers.length})</h2>
+      </div>
       {currentAnswers.map((ans) => (
         <div key={ans.answer_id} className="answer-with-comments">
           <AnswerCard
