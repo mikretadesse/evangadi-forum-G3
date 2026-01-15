@@ -1,6 +1,7 @@
 import React from "react";
 import classes from "./Footer.module.css";
 import logo from "../../assets/images/evangadi-logo-footer.png";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -16,7 +17,8 @@ function Footer() {
             <a
               href="https://www.facebook.com/Evangaditech"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <i className="fa-brands fa-facebook"></i>
             </a>
           </div>
@@ -25,7 +27,8 @@ function Footer() {
             <a
               href="https://www.instagram.com/evangaditech/"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <i className="fa-brands fa-instagram"></i>
             </a>
           </div>
@@ -34,7 +37,8 @@ function Footer() {
             <a
               href="https://www.youtube.com/c/evangaditech"
               target="_blank"
-              rel="noopener noreferrer">
+              rel="noopener noreferrer"
+            >
               <i className="fa-brands fa-youtube"></i>
             </a>
           </div>
@@ -45,10 +49,18 @@ function Footer() {
       <div className={`${classes.footer__middle} mx-sm-5`}>
         <div className={classes.footer__info}>Useful Links</div>
         <div className={classes.footer__infoText}>
-          <div className="mb-2">How it works</div>
-          <div className="mb-2">Terms of Service</div>
-          <div className="mb-2">Privacy Policy</div>
-        </div>
+          <Link to="/how-it-works" className={classes.footerLink}>
+            How it works
+          </Link>
+          <div className="mb-2">
+            <Link to="/terms" className={classes.footerLink}>
+              Terms of Service
+            </Link>
+          </div>
+          <Link to="/terms" className={classes.footerLink}>
+            Privacy Policy
+          </Link>
+         </div>
       </div>
 
       {/* RIGHT */}

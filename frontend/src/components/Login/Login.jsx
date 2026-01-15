@@ -105,5 +105,4 @@ const Login = ({ switchToSignup }) => {
     </div>
   );
 };
-
 export default Login;

@@ -60,3 +60,14 @@ a i {
     margin: 15px 0;
   }
 }
+ .footerLink {
+  color: inherit; /* Use same color as surrounding text */
+  text-decoration: none; /* Remove underline */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.footerLink:hover {
+  color: #3498db; /* Change color on hover */
+  text-decoration: underline; /* Optional: Add underline on hover */
+}
