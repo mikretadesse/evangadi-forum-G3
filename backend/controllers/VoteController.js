@@ -14,7 +14,6 @@ export const voteAnswer = async (req, res) => {
     if (!answer_id) {
       return res.status(400).json({ msg: "Answer ID is required" });
     }
-
     // Check if user already voted on this answer
     const [existingVote] = await db
       .promise()
