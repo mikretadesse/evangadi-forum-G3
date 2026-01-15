@@ -1,11 +1,27 @@
+<<<<<<< HEAD
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import "./Answer.css";
+=======
+import { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import "./Answer.css";
+import { FaUserCircle } from "react-icons/fa";
+import api from "../../Api/axios";
+import CommentBox from "../../components/Comments/CommentSection";
+>>>>>>> a0941ca910337a2e2d2caa8f074edb0f3cfa656e
 import { useAuth } from "../../context/AuthContext";
 import api from "../../Api/axios";
 import { toast } from "react-toastify";
+<<<<<<< HEAD
 import AnswerCard from "./AnswerCard";
 import CommentBox from "../../components/Comments/CommentSection";
+=======
+import { formatDistanceToNow } from "date-fns";
+
+const ANSWERS_PER_PAGE = 3;
+
+>>>>>>> a0941ca910337a2e2d2caa8f074edb0f3cfa656e
 const Answer = () => {
   const { question_id } = useParams();
   const navigate = useNavigate();
@@ -17,9 +33,14 @@ const Answer = () => {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  useEffect(() => {
-    if (!user) navigate("/");
-  }, [user, navigate]);
+  const [question, setQuestion] = useState(null);
+  const [answers, setAnswers] = useState([]);
+  const [votes, setVotes] = useState({});
+  const [userVotes, setUserVotes] = useState({});
+  const [newAnswer, setNewAnswer] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [posting, setPosting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const fetchData = useCallback(async () => {
     try {
@@ -61,6 +82,8 @@ const Answer = () => {
       toast.success("Answer posted");
     } catch {
       toast.error("Failed to post answer");
+    } finally {
+      setPosting(false);
     }
   };
 
@@ -94,12 +117,35 @@ const Answer = () => {
         </div>
       ))}
 
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}>
+            Prev
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}>
+            Next
+          </button>
+        </div>
+      )}
+
       <div className="answer-form">
-        <h4 className="form-title">Your Answer</h4>
+        <div className="text-center mb-3">
+          <h2>Ask a Public Question</h2>
+          <Link to="/home" className="subText">
+            Go to question page
+          </Link>
+        </div>
         <textarea
-          placeholder="Share your knowledge…"
           value={newAnswer}
           onChange={(e) => setNewAnswer(e.target.value)}
+          placeholder="Your answer..."
         />
         <button onClick={handlePostAnswer}>Post Answer</button>
       </div>
