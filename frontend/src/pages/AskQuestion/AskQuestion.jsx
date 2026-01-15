@@ -9,6 +9,8 @@ const AskQuestion = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [posting, setPosting] = useState(false);
+  const [error, setError] = useState("");
+
 
   const navigate = useNavigate();
   const { user, token } = useAuth();
@@ -25,6 +27,7 @@ const AskQuestion = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setPosting(true);
 
     if (!title.trim() || !description.trim()) {
       setError("Title, description are required.");
@@ -91,6 +94,8 @@ const AskQuestion = () => {
         </Link>
 
         <form onSubmit={handleSubmit}>
+          {error && <p className={styles.error}>{error}</p>}
+
           <input
             type="text"
             placeholder="Title"
