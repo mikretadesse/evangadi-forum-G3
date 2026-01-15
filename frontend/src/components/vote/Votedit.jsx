@@ -69,23 +69,23 @@ const VoteEdit = ({
       {/* Owner actions */}
       {isOwner &&
         (isEditing ? (
-          <>
+          <div>
             <button className="edit-btn" onClick={saveEdit}>
               Save
             </button>
             <button className="delete-btn" onClick={cancelEdit}>
               Cancel
             </button>
-          </>
+          </div>
         ) : (
-          <>
+          <div>
             <button className="edit-btn" onClick={startEdit}>
               Edit
             </button>
             <button className="delete-btn" onClick={deleteAnswer}>
               Delete
             </button>
-          </>
+          </div>
         ))}
     </div>
   );

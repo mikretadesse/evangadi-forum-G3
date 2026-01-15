@@ -179,23 +179,25 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin: 25px 0;
+  margin: 10px 0px;
   flex-wrap: wrap;
 }
 
 .pagination button {
-  background-color: #70767d;
+  background-color: #e67e22;
   color: #fff;
   border: none;
-  padding: 6px 20px;
+  padding: 4px 20px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
+  opacity: 0.7;
   transition: all 0.3s ease;
 }
 
 .pagination button:hover {
-  background-color: #125ca1;
+  background-color: #e67e22;
+  opacity: 1;
 }
 
 .pagination span {

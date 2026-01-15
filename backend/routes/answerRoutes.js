@@ -1,9 +1,9 @@
 import express from "express";
+import { voteAnswer } from "../controllers/VoteController.js";
 import {
   postAnswer,
   getAllAnswer,
   deleteAnswer,
-  voteAnswer,
   editAnswer,
   addComment,
   getComments,

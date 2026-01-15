@@ -7,7 +7,6 @@ import {
   FaReply,
   FaSeedling,
 } from 'react-icons/fa';
-// import Shared from '../../Components/SharedLayout/SharedLayout';
 
 const HowItWorks = () => {
   return (
