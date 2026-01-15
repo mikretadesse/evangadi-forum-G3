@@ -1,10 +1,36 @@
+/* =========================
+    ROOT CONTAINER
+========================= */
 .answer-container {
   max-width: 900px;
-  margin: 30px auto;
-  font-family: "Inter", sans-serif;
-  color: #111827;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #1f2937;
+  position: relative;
 }
 
+/* =========================
+    BACK LINK
+========================= */
+.back-link {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #4338ca;
+  text-decoration: underline;
+}
+
+/* =========================
+    QUESTION CARD
+========================= */
 .question-card {
   background: linear-gradient(135deg, #eef2ff, #f0f5ff);
   border-radius: 20px;
@@ -13,31 +39,41 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   font-family: Arial, Helvetica, sans-serif;
 }
+
 .question-label {
   font-size: 16px;
   font-weight: 700;
   color: #4f46e5;
   text-transform: uppercase;
 }
+
 .question-title {
   font-size: 18px;
   font-weight: 700;
   margin: 12px 0;
 }
+
 .question-description {
   font-size: 16px;
   line-height: 1.7;
 }
 
+/* =========================
+    ANSWER CARD
+========================= */
 .answer-card {
   display: flex;
   gap: 20px;
-  padding: 20px 24px;
-  background: #fff;
-  border-radius: 20px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
   margin-bottom: 22px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
 }
+
+/* =========================
+    USER / AVATAR
+========================= */
 .answer-avatar {
   flex-shrink: 0;
   display: flex;
@@ -45,51 +81,159 @@
   align-items: center;
   text-align: center;
 }
+
 .user-icon {
-  font-size: 54px;
-  color: gray;
-}
-.username {
-  font-weight: 700;
-  font-size: 14px;
-  margin-top: 6px;
-}
-
-.answer-content {
-  flex: 2;
-}
-.answer-text {
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 14px;
-}
-
-.answer-actions {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-.answer-actions button {
-  border: none;
-  border-radius: 12px;
-  padding: 6px 14px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  background: #eef2ff;
+  font-size: 26px;
   color: #4f46e5;
 }
+
+.username {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  border-radius: 999px;
+  width: fit-content;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.12);
+}
+
+.user-badge:hover {
+  background: linear-gradient(135deg, #37b98e, #6366f1);
+}
+
+.user-badge:hover .user-icon,
+.user-badge:hover .username {
+  color: #ffffff;
+}
+
+/* =========================
+    ANSWER CONTENT
+========================= */
+.answer-content {
+  flex: 2 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.answer-text {
+  margin: 10px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* =========================
+    ANSWER ACTIONS
+========================= */
+.answer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.answer-actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #e5e7eb;
+  color: #374151;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.answer-actions button:hover {
+  background-color: #4f46e5;
+  color: #ffffff;
+}
+
 .answer-actions button:nth-child(2) {
   background: #fee2e2;
   color: #b91c1c;
 }
 
+.answer-actions .edit-btn:hover {
+  background-color: #fbbf24;
+  color: #1f2937;
+}
+
+.answer-actions .delete-btn:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.answer-actions .owner-btns {
+  display: flex;
+  gap: 6px;
+}
+
+/* =========================
+    DATE
+========================= */
 .answer-date {
-  display: block;
-  text-align: left;
   font-size: 12px;
   color: #6b7280;
 }
+
+.edit-notice {
+  font-size: 13px;
+  font-weight: 500;
+  color: #92400e;
+  margin-bottom: 8px;
+}
+
+/* =========================
+    TEXTAREAS (GLOBAL)
+========================= */
+textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  resize: vertical;
+  font-size: 14px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+/* =========================
+    MARKDOWN-STYLE EDITOR FEEL
+========================= */
+.edit-mode textarea,
+.answer-form textarea {
+  font-family: 'Times New Roman', Times, serif
+  line-height: 1.7;
+  background: linear-gradient(#ffffff 30px, #f9fafb 30px);
+  background-size: 100% 32px;
+}
+
+/* =========================
+    AUTO-EXPAND FEEL (CSS)
+========================= */
+.edit-mode textarea {
+  min-height: 180px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.edit-mode textarea:focus {
+  min-height: 240px;
+}
+
+/* =========================
+      FORM
+========================= */
 .answer-form {
   margin-top: 50px;
   background: linear-gradient(135deg, #f9fafb, #f3f4f6);
@@ -97,33 +241,95 @@
   border-radius: 20px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
-.answer-form textarea {
-  width: 100%;
-  min-height: 140px;
-  padding: 16px 18px;
-  font-size: 15px;
-  border-radius: 14px;
-  border: 1px solid #d1d5db;
-  resize: vertical;
-}
+
 .answer-form button {
   margin-top: 18px;
   padding: 10px 26px;
   border-radius: 999px;
   border: none;
   background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: #fff;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
 
+/* =========================
+   EDIT ACTION BUTTONS
+========================= */
 .edit-actions button {
   background: #4f46e5;
-  color: #fff;
+  color: #ffffff;
   border: none;
   padding: 6px 16px;
   border-radius: 10px;
   cursor: pointer;
   font-size: 13px;
+}
+
+/* =========================
+   TITLES
+========================= */
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1e3a8a;
+}
+/* =========================
+   OVERRIDE STICKY EDIT MODE
+========================= */
+.edit-mode {
+  position: static;
+  width: 100%;
+}
+
+/* =========================
+   HORIZONTAL EXPAND EDIT BOX
+========================= */
+.edit-mode textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 100px !important;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+/* =========================
+   RESPONSIVE HORIZONTAL FEEL
+========================= */
+@media (min-width: 768px) {
+  .edit-mode textarea {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-mode textarea {
+    min-height: 180px;
+  }
+}
+
+/* =========================
+   pagination styles
+========================= */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
