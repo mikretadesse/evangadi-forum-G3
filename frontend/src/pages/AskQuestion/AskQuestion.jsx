@@ -9,7 +9,6 @@ const AskQuestion = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [posting, setPosting] = useState(false);
-  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
   const { user, token } = useAuth();
