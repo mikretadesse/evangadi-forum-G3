@@ -1,5 +1,5 @@
 /* =========================
-   ROOT CONTAINER
+    ROOT CONTAINER
 ========================= */
 .answer-container {
   max-width: 900px;
@@ -11,7 +11,7 @@
 }
 
 /* =========================
-   BACK LINK
+    BACK LINK
 ========================= */
 .back-link {
   position: absolute;
@@ -29,7 +29,7 @@
 }
 
 /* =========================
-   QUESTION CARD
+    QUESTION CARD
 ========================= */
 .question-card {
   background: linear-gradient(135deg, #eef2ff, #f0f5ff);
@@ -59,7 +59,7 @@
 }
 
 /* =========================
-   ANSWER CARD
+    ANSWER CARD
 ========================= */
 .answer-card {
   display: flex;
@@ -72,7 +72,7 @@
 }
 
 /* =========================
-   USER / AVATAR
+    USER / AVATAR
 ========================= */
 .answer-avatar {
   flex-shrink: 0;
@@ -115,7 +115,7 @@
 }
 
 /* =========================
-   ANSWER CONTENT
+    ANSWER CONTENT
 ========================= */
 .answer-content {
   flex: 2 1 auto;
@@ -130,7 +130,7 @@
 }
 
 /* =========================
-   ANSWER ACTIONS
+    ANSWER ACTIONS
 ========================= */
 .answer-actions {
   display: flex;
@@ -177,7 +177,7 @@
 }
 
 /* =========================
-   DATE
+    DATE
 ========================= */
 .answer-date {
   font-size: 12px;
@@ -192,7 +192,7 @@
 }
 
 /* =========================
-   TEXTAREAS (GLOBAL)
+    TEXTAREAS (GLOBAL)
 ========================= */
 textarea {
   width: 100%;
@@ -208,7 +208,7 @@ textarea {
 }
 
 /* =========================
-   MARKDOWN-STYLE EDITOR FEEL
+    MARKDOWN-STYLE EDITOR FEEL
 ========================= */
 .edit-mode textarea,
 .answer-form textarea {
@@ -219,7 +219,7 @@ textarea {
 }
 
 /* =========================
-   AUTO-EXPAND FEEL (CSS)
+    AUTO-EXPAND FEEL (CSS)
 ========================= */
 .edit-mode textarea {
   min-height: 180px;
@@ -232,7 +232,7 @@ textarea {
 }
 
 /* =========================
-   FORM
+      FORM
 ========================= */
 .answer-form {
   margin-top: 50px;
@@ -309,4 +309,27 @@ textarea {
   .edit-mode textarea {
     min-height: 180px;
   }
+}
+
+/* =========================
+   pagination styles
+========================= */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

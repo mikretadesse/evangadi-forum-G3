@@ -16,6 +16,8 @@ const Answer = () => {
   const [newAnswer, setNewAnswer] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const answersPerPage = 5;
 
   useEffect(() => {
     if (!user) navigate("/");
@@ -63,6 +65,11 @@ const Answer = () => {
       toast.error("Failed to post answer");
     }
   };
+  const indexOfLastAnswer = currentPage * answersPerPage;
+  const indexOfFirstAnswer = indexOfLastAnswer - answersPerPage;
+  const currentAnswers = answers.slice(indexOfFirstAnswer, indexOfLastAnswer);
+
+  const totalPages = Math.ceil(answers.length / answersPerPage);
 
   return (
     <div className="answer-container">
@@ -76,7 +83,7 @@ const Answer = () => {
           </Link>
         </div>
       )}
-      {answers.map((ans) => (
+      {currentAnswers.map((ans) => (
         <div key={ans.answer_id} className="answer-with-comments">
           <AnswerCard
             ans={ans}
@@ -93,7 +100,27 @@ const Answer = () => {
           </div>
         </div>
       ))}
+      {answers.length > answersPerPage && (
+        <div className="pagination">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+          >
+            Previous
+          </button>
 
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
       <div className="answer-form">
         <h4 className="form-title">Your Answer</h4>
         <textarea
