@@ -17,7 +17,7 @@ const Answer = () => {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const answersPerPage = 5;
+  const answersPerPage = 3;
 
   useEffect(() => {
     if (!user) navigate("/");
