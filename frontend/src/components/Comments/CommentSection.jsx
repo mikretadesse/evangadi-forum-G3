@@ -1,97 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./CommentBox.module.css";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../Api/axios";
+import { toast } from "react-toastify";
 
 const CommentBox = ({ answerid }) => {
+  const { user } = useAuth();
+
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Load comments from server
-  const loadComments = async () => {
+  // Load comments for this answer
+  const loadComments = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/comments/${answerid}`);
-      const data = await res.json();
-      setComments(data.comments || []);
+      const response = await api.get(`/comments/${answerid}`);
+      setComments(response.data.comments || []);
     } catch (error) {
-      console.log("Error loading comments");
+      console.error(
+        "Failed to load comments:",
+        error.response?.data || error.message
+      );
+      toast.error("Failed to load comments");
     }
-  };
+  }, [answerid]);
 
-  // Load comments when box opens
+  // Load comments only when comment box is opened
   useEffect(() => {
-    if (show) {
-      loadComments();
-    }
-  }, [show]);
+    if (show) loadComments();
+  }, [show, loadComments]);
 
   // Post a new comment
   const handlePost = async () => {
     if (!text.trim()) {
-      alert("Write a comment first!");
+      toast.warning("Please write a comment first");
       return;
     }
 
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      toast.error("You must be logged in to comment");
+      return;
+    }
 
     try {
-      const res = await fetch("http://localhost:4000/api/comments/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          answerid: answerid,
-          comment_body: text.trim(),
-          userid: user?.id,
-        }),
+      setLoading(true);
+
+      // Post to backend (userid is removed; backend uses JWT)
+      await api.post("/comments", {
+        answerid,
+        comment_body: text.trim(),
       });
 
-      if (res.ok) {
-        setText(""); // Clear text box
-        loadComments(); // Refresh comments
-      } else {
-        alert("Could not post comment");
-      }
+      setText(""); // clear input
+      await loadComments(); // refresh comments
+      toast.success("Comment posted successfully!");
     } catch (error) {
-      alert("Check your internet connection");
+      console.error(
+        "Failed to post comment:",
+        error.response?.data || error.message
+      );
+      toast.error("Unable to post comment");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={styles.container}>
-      {/* Show/Hide button */}
-      <button onClick={() => setShow(!show)} className={styles.btn}>
-        {show ? "Hide" : "Comment"} ({comments.length})
+      {/* Toggle comment box */}
+      <button className={styles.btn} onClick={() => setShow((prev) => !prev)}>
+        {show ? "Hide Comments" : "Comment"} ({comments.length})
       </button>
 
-      {/* Show when button is clicked */}
       {show && (
-        <div>
-          {/* Text area to write comment */}
+        <>
+          {/* Input area */}
           <div className={styles.input}>
             <textarea
+              rows="2"
+              placeholder="Type your comment..."
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Type your comment..."
-              rows="2"
             />
-            <button onClick={handlePost} className={styles.post}>
-              Post
+            <button
+              className={styles.post}
+              onClick={handlePost}
+              disabled={loading}>
+              {loading ? "Posting..." : "Post"}
             </button>
           </div>
 
-          {/* List of all comments */}
+          {/* Comment list */}
           <div className={styles.list}>
-            {comments.map((c) => (
-              <div key={c.comment_id} className={styles.item}>
-                <p>{c.comment_body}</p>
-                <small>By: {c.username || "User"}</small>
-              </div>
-            ))}
+            {comments.length === 0 ? (
+              <p className={styles.empty}>No comments yet</p>
+            ) : (
+              comments.map((comment) => (
+                <div key={comment.comment_id} className={styles.item}>
+                  <p>{comment.comment_body}</p>
+                  <small>By: {comment.username || "Anonymous"}</small>
+                </div>
+              ))
+            )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );

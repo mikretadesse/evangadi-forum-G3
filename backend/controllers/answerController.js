@@ -111,7 +111,7 @@ export const getAllAnswer = async (req, res) => {
  * Endpoint: DELETE /api/answer/:id
  */
 export const deleteAnswer = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user?.id;
   const answer_id = req.params.answer_id;
 
   try {
@@ -150,7 +150,7 @@ export const deleteAnswer = async (req, res) => {
  */
 
 export const editAnswer = async (req, res) => {
-  const user_id = req.user.id;
+  const user_id = req.user?.id;
   const answer_id = req.params.answer_id;
   const { answer } = req.body;
 
@@ -176,70 +176,3 @@ export const editAnswer = async (req, res) => {
   res.json({ msg: "Answer updated" });
 };
 
-/**
- * COMMENT FUNCTIONS
- */
-export const addComment = async (req, res) => {
-  const user_id = req.user.id;
-  const answer_id = req.params.answer_id;
-  const { content } = req.body;
-
-  await db
-    .promise()
-    .query(
-      "INSERT INTO comments (answer_id, user_id, comment_body) VALUES (?, ?, ?)",
-      [answer_id, user_id, content]
-    );
-  res.status(201).json({ msg: "Comment added" });
-};
-
-export const getComments = async (req, res) => {
-  const answer_id = req.params.answer_id;
-
-  const [comments] = await db.promise().query(
-    `SELECT 
-      c.comment_id,
-      c.comment_body AS content,
-      c.created_at,
-      u.username,
-      u.user_id
-     FROM comments c
-     JOIN users u ON c.user_id = u.user_id
-     WHERE c.answer_id = ?`,
-    [answer_id]
-  );
-
-  res.json({ comments });
-};
-
-export const deleteComment = async (req, res) => {
-  const user_id = req.user.user_id;
-  const comment_id = req.params.comment_id;
-
-  try {
-    const [comment] = await db
-      .promise()
-      .query("SELECT user_id FROM comments WHERE comment_id = ?", [comment_id]);
-
-    if (comment.length === 0)
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Not Found", msg: "Comment not found" });
-    if (comment[0].user_id !== user_id)
-      return res.status(StatusCodes.FORBIDDEN).json({
-        error: "Forbidden",
-        msg: "You are not authorized to delete this comment",
-      });
-
-    await db
-      .promise()
-      .query("DELETE FROM comments WHERE comment_id = ?", [comment_id]);
-    res.status(StatusCodes.OK).json({ msg: "Comment deleted successfully" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: "Internal Server Error",
-      msg: "An unexpected error occurred",
-    });
-  }
-};

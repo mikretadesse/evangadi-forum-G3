@@ -1,4 +1,3 @@
-
 .loginWrapper {
   display: flex;
   align-items: center;
@@ -9,7 +8,7 @@
 /* Login card container */
 .loginCard {
   width: 100%;
-  max-width: 500px; 
+  max-width: 500px;
   background: #ffffff;
   padding: 3rem;
   margin: 2rem;
@@ -125,7 +124,7 @@
   color: #ffffff;
   border: none;
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   font-weight: 500;
   cursor: pointer;
   display: block;
@@ -147,4 +146,3 @@
 .bottomLink:hover {
   text-decoration: underline;
 }
-

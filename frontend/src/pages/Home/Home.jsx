@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { GrFormNext } from "react-icons/gr";
 import { FaUserCircle } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 import api from "../../Api/axios";
 
 const QUESTIONS_PER_PAGE = 5;
@@ -76,22 +77,27 @@ const Home = () => {
 
   // Delete question
   const deleteQuestion = async (e, question_id) => {
-    e.stopPropagation(); // prevent navigation
+    e.stopPropagation();
     if (!window.confirm("Are you sure you want to delete this question?"))
       return;
 
-    try {
-      const token = localStorage.getItem("token");
-      await api.delete(`/question/${question_id}`, {
-        headers: { Authorization: "Bearer " + token },
-      });
+    // 1. Define the promise FIRST
+    const deletePromise = api.delete(`/question/${question_id}`, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+    });
 
-      // Remove deleted question from state
+    // 2. Pass the promise to toast
+    toast.promise(deletePromise, {
+      pending: "Deleting question...",
+      success: "Question removed! 👌",
+      error: "Failed to delete. Try again. 🤯",
+    });
+
+    try {
+      await deletePromise; // Wait for it to finish
       setQuestions((prev) => prev.filter((q) => q.question_id !== question_id));
-      alert("Question deleted successfully");
     } catch (err) {
       console.error(err.response?.data || err.message);
-      alert("Error deleting question");
     }
   };
 
@@ -99,26 +105,26 @@ const Home = () => {
   if (error) return <div>{error}</div>;
 
   return (
-  <div className={styles.pageWrapper}>
-    <div className={styles.homeHead}>
-      <div className={styles.askSection}>
-        <Link to="/ask-question">
-          <button className={styles.askBtn}>Ask Question</button>
-        </Link>
+    <div className={styles.pageWrapper}>
+      <div className={styles.homeHead}>
+        <div className={styles.askSection}>
+          <Link to="/ask-question">
+            <button className={styles.askBtn}>Ask Question</button>
+          </Link>
+        </div>
+        <h4 className={styles.welcomeMsg}>
+          Welcome: <span className={styles.username}>{user?.username}</span>
+        </h4>
       </div>
-      <h4 className={styles.welcomeMsg}>
-        Welcome: <span className={styles.username}>{user?.username}</span>
-      </h4>
-    </div>
 
-    <div className={styles.searchBox}>
-      <input
-        type="text"
-        placeholder="Search question"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-    </div>
+      <div className={styles.searchBox}>
+        <input
+          type="text"
+          placeholder="Search question"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       <div className={styles.questionsList}>
         {currentQuestions.length === 0 ? (

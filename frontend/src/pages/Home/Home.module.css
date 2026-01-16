@@ -105,12 +105,13 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid #1976d2;
+  border: 1px solid #e67e22;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 44px;
   color: #1976d2;
+  opacity: 0.75;
 }
 
 .questionText {
@@ -132,7 +133,7 @@
 
 .arrow {
   margin-left: 10px;
-  font-size: 22px;
+  font-size: 25px;
   color: #1976d2;
   font-weight: bold;
 }
@@ -144,14 +145,14 @@
 }
 
 .editBtn {
-  background-color: #4caf50;
+  background-color: #e67e22;
   color: #fff;
   border: none;
-  padding: 5px 10px;
+  padding: 5px 15px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
-  opacity: 0.95;
+  opacity: 0.7;
 }
 
 .editBtn:hover {
@@ -159,14 +160,14 @@
 }
 
 .deleteBtn {
-  background-color: #f44336;
+  background-color: #e67e22;
   color: #fff;
   border: none;
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
-  opacity: 0.95;
+  opacity: 0.7;
 }
 
 .deleteBtn:hover {
@@ -208,7 +209,6 @@
 /* Responsive adjustments */
 @media (max-width: 568px) {
   .homeHead {
-    /* flex-direction: column; */
     align-items: flex-start;
     gap: 12px;
   }
@@ -220,6 +220,10 @@
 
   .questionActions {
     margin-top: 8px;
+  }
+
+  .arrow {
+    display: none;
   }
 }
 

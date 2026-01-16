@@ -43,7 +43,6 @@ export const getAllQuestions = async (req, res) => {
  */
 export const getQuestionById = async (req, res) => {
   const { question_id } = req.params;
-  console.log(req.params);
   const questionIdNum = parseInt(question_id, 10);
   if (isNaN(questionIdNum)) {
     return res
@@ -211,10 +210,9 @@ export const deleteQuestion = async (req, res) => {
     // 1. Verify question exists and get owner
     const [rows] = await db
       .promise()
-      .query(
-        "SELECT user_id FROM questions WHERE question_id = ?",
-        [questionId]
-      );
+      .query("SELECT user_id FROM questions WHERE question_id = ?", [
+        questionId,
+      ]);
 
     if (rows.length === 0) {
       return res.status(404).json({
@@ -234,10 +232,7 @@ export const deleteQuestion = async (req, res) => {
     // 3. Delete question
     await db
       .promise()
-      .query(
-        "DELETE FROM questions WHERE question_id = ?",
-        [questionId]
-      );
+      .query("DELETE FROM questions WHERE question_id = ?", [questionId]);
 
     // 4. Success response
     return res.status(200).json({
