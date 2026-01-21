@@ -1,13 +1,13 @@
 -- 1. Create Database
-CREATE DATABASE IF NOT EXISTS evangadi_forum;
-USE evangadi_forum;
+-- CREATE DATABASE IF NOT EXISTS evangadi_forum;
+-- USE evangadi_forum;
 
 -- Drop tables if they exist (order matters because of foreign keys)
-DROP TABLE IF EXISTS answer_votes;
-DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS answers;
-DROP TABLE IF EXISTS questions;
-DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS answer_votes;
+-- DROP TABLE IF EXISTS comments;
+-- DROP TABLE IF EXISTS answers;
+-- DROP TABLE IF EXISTS questions;
+-- DROP TABLE IF EXISTS users;
 
 -- 2. Users Table
 CREATE TABLE users (
